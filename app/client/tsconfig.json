@@ -1,0 +1,34 @@
+{
+  "compileOnSave": true,
+  "compilerOptions": {
+    "target": "es6",
+    "module": "es6",
+    "declaration": false,
+    "noImplicitAny": true,
+    "removeComments": false,
+    "noLib": false,
+    "preserveConstEnums": true,
+    "outDir": "../../src/client",
+    "suppressImplicitAnyIndexErrors": true,
+    "jsx": "preserve",
+    "experimentalDecorators": true,
+    "sourceMap": false,
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "classic",
+    "allowJs": true,
+    "strictNullChecks": false
+  },
+  "filesGlob": [
+    "!./node_modules/**",
+    "**/*.ts",
+    "**/*.tsx",
+    "../server/src/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "./**/node_modules"
+  ],
+  "atom": {
+    "rewriteTsconfig": false
+  }
+}

@@ -4,7 +4,7 @@ import * as apollo from 'apollo-server';
 import * as path from 'path';
 import * as fs from 'fs';
 import * as cors from 'cors';
-import * as morgan from 'morgan';
+// import * as morgan from 'morgan';
 
 import { createServer } from 'apollo-modules';
 import initSchema from './schema/index';
@@ -14,7 +14,7 @@ import MongoConnector from './connectors/mongo_connector';
 import { makeExecutableSchema } from 'graphql-tools';
 // import * as historyAPIFallback from 'connect-history-api-fallback';
 
-const port = 3002;
+const port = 3000;
 
 // create root url
 if (!process.env.ROOT_URL) {
@@ -37,11 +37,11 @@ export function startExpress(conn: MongoConnector) {
   } catch (e) {
     console.log('Serving development build with nwb middleware');
     console.log('Run `npm run build` to create a production build');
-    // app.use(require('nwb/express')(express));
+    app.use(require('nwb/express')(express));
   }
 
   // setup logging
-  app.use(morgan('combined'));
+  // app.use(morgan('combined'));
 
   // setup basic properties for parsing requests
   app.use(bodyParser.json());

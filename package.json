@@ -6,7 +6,7 @@
   "scripts": {
     "build": "nwb build-react-app",
     "clean": "nwb clean-app",
-    "start": "nodemon server.js",
+    "start": "nodemon --watch src/server server.js",
     "startClient": "nwb serve-react-app --reload",
     "test": "nwb test",
     "test:coverage": "nwb test --coverage",
@@ -36,7 +36,7 @@
     "sweetalert2": "^4.1.9"
   },
   "devDependencies": {
-    "apollo-authentication-semantic-ui": "../../packages/apollo-authentication-semantic-ui",
+    "apollo-authentication-semantic-ui": ">0.0.2",
     "apollo-client": "^0.4.11",
     "apollo-mantra": "^1.1.0",
     "date-format-lite": "^0.9.1",

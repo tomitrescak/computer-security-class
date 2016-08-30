@@ -75,7 +75,6 @@ const ExerciseView = ({ context, user, params, userId, exerciseData,
               <Header2 dividing text={`${exercise.name}`} icon="edit" />
               <MarkdownView text={exercise.instructions} />
 
-
               <For each="question" of={exercise.questions} index="index">
                 <SolutionView key={question._id} question={question} solutionId={solutions.find((s) => s.questionId === question._id)._id} />
               </For>

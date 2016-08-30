@@ -202,7 +202,7 @@ export default class User extends MongoEntity<UserEntity> {
       throw new Error('User email does not exist');
     }
 
-    let token = createToken(user, type, 0, to).hashedToken;
+    let token = createToken(user, type, 1, to).hashedToken;
 
     // create url
     let url = `${process.env.ROOT_URL}?${type}=${token}`;

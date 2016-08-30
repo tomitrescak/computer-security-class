@@ -23,17 +23,20 @@ declare global {
   }
 }
 
-const networkInterface = createNetworkInterface('http://localhost:3002/graphql'); // /graphql
-// const networkInterface = createNetworkInterface('/graphql');
+// const networkInterface = createNetworkInterface('http://localhost:3002/graphql'); // /graphql
+const networkInterface = createNetworkInterface('/graphql');
 
-// middlewares
+// middlewares 123
 
 networkInterface.use([{
   applyMiddleware(req: any, next: any) {
     if (!req.options.headers) {
       req.options.headers = {};  // Create the header object if needed.
     }
-    req.options.headers.authorization = localStorage.getItem('jwtToken') ? localStorage.getItem('jwtToken') : null;
+    const token = localStorage.getItem('jwtToken');
+    if (token) {
+      req.options.headers.authorization = token;
+    }
     next();
   }
 }]);
@@ -43,11 +46,11 @@ networkInterface.use([{
 networkInterface.useAfter([{
   applyAfterware(response: any, next: any) {
     if (response.status === 401) {
-      localStorage.setItem('jwtToken', null);
+      localStorage.removeItem('jwtToken');
       RouterUtils.go('/sessionEnded1');
     }
     if (response.status === 200) {
-      localStorage.setItem('jwtToken', null);
+      localStorage.removeItem('jwtToken');
       RouterUtils.go('/');
     }
     next();

@@ -4,7 +4,7 @@
 import apolloClient from './apollo';
 import { combineReducers } from 'redux';
 import { routerReducer } from 'react-router-redux';
-// import { reducer as formReducer } from 'redux-form';
+import { reducer as formReducer } from 'redux-form';
 import { reducer as accountsReducer } from 'apollo-authentication-semantic-ui';
 import solutionReducer, { ISolutionState } from '../modules/solution/actions/solution_reducer';
 import exerciseReducer, { IExerciseState } from '../modules/exercise/actions/exercise_reducer';
@@ -20,6 +20,7 @@ import context from './context';
 const rootReducer = combineReducers({
   accounts: accountsReducer(context),
   apollo: apolloClient.reducer(),
+  form: formReducer,
   routing: routerReducer,
   solution: solutionReducer,
   exercise: exerciseReducer ,

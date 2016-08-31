@@ -150,6 +150,7 @@ declare var gql: any;
 declare module 'react-apollo' {
   export var ApolloProvider: any;
   export var connect: any;
+  export var graphql: any;
 }
 
 declare module 'apollo-client/gql' {

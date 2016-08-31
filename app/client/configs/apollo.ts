@@ -17,14 +17,25 @@ declare global {
       ownProps: T;
     }
 
+    interface IApolloMutation {
+      variables?: any;
+      optimisticResponse?: any;
+      updateQueries?: any;
+    }
+
+    interface IMutationProps<T, U> {
+      mutate: (param: IApolloMutation) => Promise<U>;
+      ownProps: T;
+    }
+
     interface IComponentMutations<T> {
       mutations: T;
     }
   }
 }
 
-// const networkInterface = createNetworkInterface('http://localhost:3002/graphql'); // /graphql
-const networkInterface = createNetworkInterface('/graphql');
+const networkInterface = createNetworkInterface('http://localhost:3002/graphql'); // /graphql
+// const networkInterface = createNetworkInterface('/graphql');
 
 // middlewares 123
 
@@ -59,6 +70,9 @@ networkInterface.useAfter([{
 
 const client = new ApolloClient({
   networkInterface,
+  dataIdFromObject: (result: any) => {
+    return result._id;
+  }
 });
 
 export default client;

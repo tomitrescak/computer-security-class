@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Grid, Column, Segment, Input, Button, Divider, Label, TextArea, Form, Accordion, AccordionItem, Dropdown, DropdownItem } from 'semanticui-react';
+import { Grid, Column, Segment, Input, Divider, Form, Accordion, AccordionItem, TextArea } from 'semanticui-react';
+// import { TextArea } from 'redux-form-semantic-ui';
 import jss from 'jss';
 
 interface IContainerProps { }
@@ -58,7 +59,7 @@ const QuestionEditView = ({question, bind, index}: IComponent) => {
         </Segment>
       </If>
     </Form>
-  )
+  );
 };
 
 export default QuestionEditView;

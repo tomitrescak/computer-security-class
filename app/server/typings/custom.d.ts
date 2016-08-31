@@ -29,3 +29,8 @@ declare module 'meteor-sha256' {
   function sha256 (text: string): string;
   export = sha256;
 }
+
+declare module 'connect-history-api-fallback' {
+  var history: any;
+  export = history;
+}

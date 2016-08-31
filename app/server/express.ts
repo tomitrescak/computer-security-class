@@ -12,9 +12,9 @@ import initContext from './models/context';
 import MongoConnector from './connectors/mongo_connector';
 
 import { makeExecutableSchema } from 'graphql-tools';
-// import * as historyAPIFallback from 'connect-history-api-fallback';
+import * as historyAPIFallback from 'connect-history-api-fallback';
 
-const port = 3000;
+const port = 3002;
 
 // create root url
 if (!process.env.ROOT_URL) {
@@ -37,7 +37,8 @@ export function startExpress(conn: MongoConnector) {
   } catch (e) {
     console.log('Serving development build with nwb middleware');
     console.log('Run `npm run build` to create a production build');
-    app.use(require('nwb/express')(express));
+    app.use(historyAPIFallback());
+    // app.use(require('nwb/express')(express, { reload: true }));
   }
 
   // setup logging
@@ -76,7 +77,7 @@ export function startExpress(conn: MongoConnector) {
   app.use('/graphql', apollo.apolloExpress(createServer(graphqlOptions)));
   app.use('/graphiql', apollo.graphiqlExpress({ endpointURL: '/graphql' }));
 
-  // app.use(historyAPIFallback());
+  // 
 
   // setup spa
   // app.get('*', function (req, res) {

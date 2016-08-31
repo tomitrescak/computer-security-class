@@ -1,5 +1,8 @@
 import * as React from 'react';
-import { Input, Divider, Label, Message } from 'semanticui-react';
+import { Divider, Label, Message } from 'semanticui-react';
+import { TextArea, Input } from 'redux-form-semantic-ui';
+import { Field } from 'redux-form';
+
 import MarkdownView from '../../core/containers/markdown_container';
 import jss from 'jss';
 
@@ -8,11 +11,12 @@ import * as SolutionActions from '../actions/solution_actions';
 export interface IContainerProps {
   solutionId: string;
   question: Cs.Entities.IQuestion;
+  formName: string;
 }
 
 export interface IComponentProps {
-  context: Cs.IContext;
-  solution: Cs.Entities.ISolution;
+    context: Cs.IContext;
+    solution: Cs.Entities.ISolution;
 }
 
 interface IComponent extends IContainerProps, IComponentProps { }
@@ -23,8 +27,7 @@ const { classes } = jss.createStyleSheet({
   }
 }).attach();
 
-const SolutionView = ({ context, question, solution}: IComponent) => {
-  const bind = context.Utils.Binding(SolutionActions.UPDATE, 'solutions.' + solution._id);
+const SolutionView = ({ context, question, solution, formName }: IComponent) => {
   const questionText = solution.userQuestion ? solution.userQuestion : question.question;
   return (
     <div className="ui form">
@@ -36,13 +39,13 @@ const SolutionView = ({ context, question, solution}: IComponent) => {
         <label>{questionText}</label>
         <Choose>
           <When condition={question.control === 'textarea'}>
-            <textarea readOnly={solution.finished} className={classes.textbox} rows="3" placeholder={questionText} defaultValue={solution.userAnswer} onChange={bind('userAnswer')}></textarea>
+            <TextArea name={`${formName}.userAnswer`} readOnly={solution.finished} classes={classes.textbox} rows={3} placeholder={questionText}></TextArea>
           </When>
           <Otherwise>
-            <Input readOnly={solution.finished} defaultValue={solution.userAnswer} placeholder={questionText} onChange={bind('userAnswer')} />
+            <Input name={`${formName}.userAnswer`} readOnly={solution.finished}  placeholder={questionText}  />
           </Otherwise>
         </Choose>
-        
+
         <If condition={solution.mark != null}>
           <Label color="blue" text={'Mark: ' + solution.mark} />
         </If>

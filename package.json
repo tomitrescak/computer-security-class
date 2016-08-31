@@ -55,6 +55,7 @@
     "nwb": "0.12.x",
     "react": "^15.3.1",
     "react-addons-update": "^15.3.0",
+    "react-apollo": "^0.4.7",
     "react-dom": "^15.3.0",
     "react-functional": "^2.0.0",
     "react-helmet": "^3.1.0",
@@ -63,6 +64,8 @@
     "react-router": "^2.6.1",
     "react-router-redux": "^4.0.5",
     "react-s-alert": "^1.1.4",
+    "redux-form": "^6.0.1",
+    "redux-form-semantic-ui": "../../packages/redux-form-semantic-ui",
     "redux-thunk": "^2.1.0",
     "semanticui-react": "^0.1.53",
     "sweetalert2": "^4.1.7"

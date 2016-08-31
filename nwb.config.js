@@ -8,12 +8,22 @@ module.exports = {
     plugins: ['jsx-control-statements']
   },
   webpack: {
+    hotMiddleware: {
+      reload: true
+    },
     loaders: {
       babel: {
         test: /\.jsx?/
       }
     },
     extra: {
+      entry: [
+        'react-hot-loader/patch',
+        'webpack-hot-middleware/client'
+      ],
+      // plugins: [
+      //   new webpack.HotModuleReplacementPlugin()
+      // ],
       resolve: {
         extensions: ['', '.js', '.jsx', '.json']
       },

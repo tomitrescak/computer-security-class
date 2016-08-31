@@ -130,7 +130,7 @@ const queryText = `
 `;
 
 const queries = {
-  async exercise(root: any, { id }: any, { userId, exercises }: App.Context ): Promise<Cs.Collections.IExerciseDAO> {
+  async exercise(root: any, { id }: any, { userId, exercises }: App.Context): Promise<Cs.Collections.IExerciseDAO> {
     if (!userId) {
       return null;
     }
@@ -167,12 +167,14 @@ const queries = {
         let expectedAnswer: string = null;
         if (question.possibilitiesGroupId) {
           const group = await possibilities.findOne({ _id: question.possibilitiesGroupId });
-          const possibility = <Cs.Collections.IQuestionPossibilityDAO> Random.choice(group.possibilities);
+          const possibility = <Cs.Collections.IQuestionPossibilityDAO>Random.choice(group.possibilities);
           userQuestion = possibility.question;
           expectedAnswer = possibility.answer;
         }
 
+        // create a new solution
         const solution: Cs.Collections.ISolutionDAO = {
+          _id: Random.id(),
           userId: userId,
           user: userName,
           exerciseId: exerciseId,
@@ -199,7 +201,7 @@ const queries = {
 };
 
 const mutationText = `
-  answers(solutionIds: [String]!, userAnswers: [String]!, finished: Boolean): [Float]
+  answers(solutionIds: [String]!, userAnswers: [String]!, finished: Boolean): [Solution]
   mark(solutionIds: [String]!, comments: [String]!, marks: [Float]!): Boolean
   save(exercise: ExerciseInput): Boolean
 `;
@@ -258,59 +260,60 @@ const mutations = {
       questions.update({ _id: question._id }, { $set: question }, { upsert: true });
     }
   },
-  async answers(root: any, { solutionIds, userAnswers, finished }: IActionAnswer, { userId, solutions }: App.Context): Promise<number[]> {
+  async answers(root: any, { solutionIds, userAnswers, finished }: IActionAnswer, { userId, solutions }: App.Context): Promise<Cs.Collections.ISolutionDAO[]> {
     if (!solutionIds || !userAnswers || solutionIds.length !== userAnswers.length) {
       console.error('Unexpected input for "answers"');
       return;
     }
 
-    try {
-      let answers: number[] = [];
-      const modified = new Date;
 
-      for (let i = 0; i < solutionIds.length; i++) {
-        const solutionId = solutionIds[i];
-        const userAnswer = userAnswers[i]; // .replace(/ /g, '').toLowerCase();
+    let answers: Cs.Collections.ISolutionDAO[] = [];
+    const modified = new Date;
 
-        const solution = await solutions.findOne({ _id: solutionId, userId });
-        if (!solution) {
-          throw new Error('Access violation!');
-        }
-        // const exercise = Exercises.findOne(solution.exerciseId);
-        // const question = Questions.findOne(solution.questionId);
+    for (let i = 0; i < solutionIds.length; i++) {
+      const solutionId = solutionIds[i];
+      const userAnswer = userAnswers[i]; // .replace(/ /g, '').toLowerCase();
 
-        // // we either have to check according to custom question (from possibilities) or default question (from question)
-        // let expectedAnswer: string = solution.expectedAnswer ? solution.expectedAnswer : question.expectedAnswer;
-        // let mark: number = null;
+      console.log(solutionId, userId);
 
-        // if (expectedAnswer) {
-        //   // remove spacen and put all to lowercas
-        //   expectedAnswer = expectedAnswer.replace(/ /g, '').toLowerCase();
-
-        //   // question can contain a validation script
-        //   // validation script returns function
-        //   if (question.validation) {
-        //     let validationText = `function (exercise, question, expectedAnswer, userAnswer) { ${question.validation} }`;
-        //     let validation = eval(validationText);
-        //     if (validation(exercise, question, expectedAnswer, userAnswer)) {
-        //       mark = question.points;
-        //     }
-        //   } else {
-        //     if (expectedAnswer && userAnswer) {
-        //       mark = expectedAnswer === userAnswer ? question.points : 0;
-        //     }
-        //   }
-        // }
-
-        answers[i] = 0;
-        console.log(userAnswer);
-        await solutions.update({ _id: solution._id }, { $set: { userAnswer, finished, modified } });
+      const solution = await solutions.findOne({ _id: solutionId, userId });
+      if (!solution) {
+        throw new Error('Access violation!');
       }
-      return answers;
-    } catch (ex) {
-      console.log(ex.message);
-      console.log(ex.stack);
+      // const exercise = Exercises.findOne(solution.exerciseId);
+      // const question = Questions.findOne(solution.questionId);
+
+      // // we either have to check according to custom question (from possibilities) or default question (from question)
+      // let expectedAnswer: string = solution.expectedAnswer ? solution.expectedAnswer : question.expectedAnswer;
+      // let mark: number = null;
+
+      // if (expectedAnswer) {
+      //   // remove spacen and put all to lowercas
+      //   expectedAnswer = expectedAnswer.replace(/ /g, '').toLowerCase();
+
+      //   // question can contain a validation script
+      //   // validation script returns function
+      //   if (question.validation) {
+      //     let validationText = `function (exercise, question, expectedAnswer, userAnswer) { ${question.validation} }`;
+      //     let validation = eval(validationText);
+      //     if (validation(exercise, question, expectedAnswer, userAnswer)) {
+      //       mark = question.points;
+      //     }
+      //   } else {
+      //     if (expectedAnswer && userAnswer) {
+      //       mark = expectedAnswer === userAnswer ? question.points : 0;
+      //     }
+      //   }
+      // }
+
+      solution.userAnswer = userAnswer;
+      solution.finished = finished;
+      solution.modified = modified.getTime();
+      answers.push(solution);
+
+      await solutions.update({ _id: solution._id }, { $set: { userAnswer, finished, modified } });
     }
+    return answers;
   }
 };
 

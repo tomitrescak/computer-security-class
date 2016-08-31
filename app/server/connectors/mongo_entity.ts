@@ -82,6 +82,6 @@ export default class MongoEntity<T> {
   update(selector: Object, update: Object, options?: ReplaceOneOptions) {
     this.clearUpdateCaches(selector);
 
-    return this.collection.updateOne(selector, update);
+    return this.collection.updateOne(selector, update, options);
   }
 }

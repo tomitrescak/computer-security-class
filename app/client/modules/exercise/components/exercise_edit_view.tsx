@@ -5,6 +5,7 @@ import Loading from '../../core/components/loading_view';
 import * as actions from '../actions/exercise_actions';
 import { Markdown, Input } from 'redux-form-semantic-ui';
 import { Field, FieldMap, FieldArray } from 'redux-form'
+import Random from 'meteor-random';
 
 export interface IContainerProps {
   params: {
@@ -52,7 +53,7 @@ const Questions = ({fields, questions}: IQuestionsProps) => (
       ))
     }
     <Button style={{marginTop: '12px'}} color="default" text="Insert Question" 
-      icon="plus" floated="right" onClick={() => fields.push()} />
+      icon="plus" floated="right" onClick={() => fields.push({ _id: Random.id() })} />
     <div style={{clear: 'both'}}></div>
   </div>
 );

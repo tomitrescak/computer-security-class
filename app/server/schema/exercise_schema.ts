@@ -256,7 +256,7 @@ const mutations = {
 
     // then update all questions
     for (let question of exercise.questions) {
-      questions.update({ _id: question._id }, { $set: question }, { upsert: true });
+      await questions.update({ _id: question._id }, { $set: question }, { upsert: true });
     }
 
     // find the exercise again as it needs to be re-resolved

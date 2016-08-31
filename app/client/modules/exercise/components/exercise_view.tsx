@@ -17,9 +17,6 @@ export interface IComponentProps {
   context: Cs.IContext;
   userId: string;
   user: Cs.Accounts.SystemUser;
-  initialValues: {
-    solutions: Cs.Entities.ISolution[];
-  };
   exerciseData?: {
     exercise: Cs.Entities.IExercise;
   };
@@ -34,7 +31,11 @@ export interface IComponentMutations {
   answer: (solutionIds: string[], userAnswers: string[], finished: boolean) => any;
 }
 
-export interface IComponent extends IContainerProps, IComponentProps, IComponentMutations, Apollo.IComponentMutations<IComponentMutations> { }
+export interface IComponent extends IContainerProps, IComponentProps, IComponentMutations, Apollo.IComponentMutations<IComponentMutations> {
+  initialValues?: {
+    solutions: Cs.Entities.ISolution[];
+  };
+}
 
 interface IQuestionsProps {
   fields: string[];
@@ -60,7 +61,7 @@ const QuestionsView = ({fields, questions, context, solutions}: IQuestionsProps)
               />
           )
         }
-      )}
+        )}
     </div>
   )
 }

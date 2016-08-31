@@ -124,7 +124,6 @@ const withMutation = graphql(gql`
 
 const withForm = reduxForm({
   form: 'exerciseForm',
-  fields: ['solutions'],
   enableReinitialize: true
 });
 

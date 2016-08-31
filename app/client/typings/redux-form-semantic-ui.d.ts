@@ -17,4 +17,32 @@ declare module 'redux-form-semantic-ui' {
   }
 
   export class TextArea extends React.Component<ITextArea, {}> { }
+
+  interface IMarkdown extends ITextArea {
+    defaultValue: string;
+  }
+
+  export class Markdown extends React.Component<IMarkdown, {}> { }
+
+  interface IInput {
+    classes?: string;
+    placeholder?: string;
+    label?: string;
+    icon?: string;
+    iconPosition?: string;
+    children?: any;
+    inputClasses?: string;
+    type?: string;
+    leftLabel?: string;
+    rightLabel?: string;
+    inline?: boolean;
+    search?: boolean;
+    disabled?: boolean;
+    readOnly?: boolean;
+    name?: string;
+    input?: ReduxFormInput;
+    meta?: ReduxFormMeta;
+  }
+
+  export class Input extends React.Component<IInput, {}> { }
 }

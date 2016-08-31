@@ -9,31 +9,6 @@ export interface IExerciseState {
   };
 }
 
-const binder = bindingReducer(Actions.UPDATE);
-
 export default function reducer(state: IExerciseState = { exercises: {}}, action: any) {
-
-  // take care of binding calls
-  const bindingResult = binder(state, action);
-  if (bindingResult) {
-    return bindingResult;
-  }
-
-  // take care of query copies
-  switch (getQuery(action)) {
-    case 'exercise':
-      return copyQuery(state, 'exercises', action.result.data.exercise);
-  }
-
-  switch (action.type) {
-    case Actions.INSERT_QUESTION:
-      const newExercise = {
-        _id: action.questionId,
-        points: 0
-      };
-
-      return update(state, { exercises: { [action.exerciseId]: { questions: { $push: [newExercise] } }}});
-  }
-
   return state;
 }

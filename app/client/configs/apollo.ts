@@ -28,6 +28,11 @@ declare global {
       ownProps: T;
     }
 
+    interface IQueryProps<T, U> {
+      ownProps: T;
+      data: U;
+    }
+
     interface IComponentMutations<T> {
       mutations: T;
     }

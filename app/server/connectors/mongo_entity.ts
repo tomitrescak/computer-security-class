@@ -74,13 +74,13 @@ export default class MongoEntity<T> {
   }
 
   insert(document: T) {
-    this.clearUpdateCaches(document);
+    this.clearInsertCaches(document);
 
     return this.collection.insertOne(document);
   }
 
   update(selector: Object, update: Object, options?: ReplaceOneOptions) {
-    this.clearInsertCaches(selector);
+    this.clearUpdateCaches(selector);
 
     return this.collection.updateOne(selector, update);
   }

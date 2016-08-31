@@ -196,14 +196,13 @@ const queries = {
 
     // return the user option, now for sure there are some
     return sols;
-
   }
 };
 
 const mutationText = `
   answers(solutionIds: [String]!, userAnswers: [String]!, finished: Boolean): [Solution]
   mark(solutionIds: [String]!, comments: [String]!, marks: [Float]!): Boolean
-  save(exercise: ExerciseInput): Boolean
+  save(exercise: ExerciseInput): Exercise
 `;
 
 interface IActionAnswer {
@@ -259,6 +258,11 @@ const mutations = {
     for (let question of exercise.questions) {
       questions.update({ _id: question._id }, { $set: question }, { upsert: true });
     }
+
+    // find the exercise again as it needs to be re-resolved
+    exercise = await exercises.findOne({_id: exercise._id});
+
+    return exercise;
   },
   async answers(root: any, { solutionIds, userAnswers, finished }: IActionAnswer, { userId, solutions }: App.Context): Promise<Cs.Collections.ISolutionDAO[]> {
     if (!solutionIds || !userAnswers || solutionIds.length !== userAnswers.length) {
@@ -348,16 +352,16 @@ const resolvers = {
       }
     },
     expectedAnswer(question: Cs.Collections.IQuestionDAO) {
-      return question.expectedAnswer ? question.expectedAnswer : null;
+      return question.expectedAnswer ? question.expectedAnswer : '';
     },
     validation(question: Cs.Collections.IQuestionDAO) {
-      return question.validation ? question.validation : null;
+      return question.validation ? question.validation : '';
     },
     description(question: Cs.Collections.IQuestionDAO) {
-      return question.description ? question.description : null;
+      return question.description ? question.description : '';
     },
     control(question: Cs.Collections.IQuestionDAO) {
-      return question.control ? question.control : null;
+      return question.control ? question.control : '';
     }
   }
 };

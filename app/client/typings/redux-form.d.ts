@@ -7,6 +7,20 @@ declare module 'redux-form' {
   export let getFormValues: any;
   export let formValueSelector: any;
 
+  export interface FieldMap {
+    forEach(callback: Function): Function;
+    insert(index: number, value: any): Function;
+    map(callback: (val: string, index: number) => any): Function;
+    move(from: number, to: number): Function;
+    pop(): Function;
+    push(value?: any): Function;
+    remove(index: number): Function;
+    removeAll(): Function;
+    shift(): Function;
+    swap(indexA: number, indexB: number): Function;
+    unshift(value?: any): Function;
+  }
+
   export interface ReduxFormInput {
     checked?: boolean;
     name?: string;

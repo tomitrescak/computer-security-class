@@ -1,9 +1,10 @@
 import * as React from 'react';
-import { Header2, Segment, Input, Button, Divider, Label, TextArea, Accordion } from 'semanticui-react';
-import MarkdownView from '../../core/containers/markdown_container';
+import { Header2, Segment, Button, Divider, Label, Accordion } from 'semanticui-react';
 import QuestionEditView from './question_edit_view';
 import Loading from '../../core/components/loading_view';
 import * as actions from '../actions/exercise_actions';
+import { Markdown, Input } from 'redux-form-semantic-ui';
+import { Field, FieldMap, FieldArray } from 'redux-form'
 
 export interface IContainerProps {
   params: {
@@ -15,82 +16,76 @@ export interface IContainerProps {
 export interface IComponentProps {
   context: Cs.IContext;
   userId: string;
-  exercise: Cs.Entities.IExercise;
-  data?: {
+}
+
+export interface IComponent extends IContainerProps, IComponentProps {
+  data: {
     exercise: Cs.Entities.IExercise;
     solutions: Cs.Entities.ISolution[];
     refetch: Function;
     loading: boolean;
   }
-}
-
-export interface IComponentMutations {
+  initialValues: {
+    exercise: Cs.Entities.IExercise
+  },
   save: (exerciseId: string) => any;
 }
 
-interface IComponentActions { 
-  insertQuestion: Function;
-}
-interface IComponent extends IContainerProps, IComponentProps, IComponentActions, Apollo.IComponentMutations<IComponentMutations> { }
 
-let index: number = 0;
-let question: Cs.Entities.IQuestion;
-
-function readSolutions(store: Cs.IStore, ids: string[]): string[] {
-  let state = store.getState();
-  const result: string[] = [];
-  for (let id of ids) {
-    result.push(state.solution.solutions[id].userAnswer);
-  }
-  return result;
+interface IQuestionsProps {
+  fields: FieldMap;
+  questions: Cs.Entities.IQuestion;
 }
 
-function readSolutionIds(solutions: Cs.Entities.ISolution[]): string[] {
-  return solutions.map(s => s._id);
-}
-
-const ExerciseView = ({ context, params, userId, data, mutations: { save }, exercise, insertQuestion}: IComponent) => {
-  
-  const bind = context.Utils.Binding(actions.UPDATE, 'exercises.' + exercise._id);
-  
-  return (
-  <div className="ui form">
-    <Choose>
-      <When condition={!exercise}>
-        <Loading />
-      </When>
-      <Otherwise>
-        <Segment>
-          <Input label="Name" placeholder="Name" defaultValue={exercise.name} onChange={bind('name')} />
-          <Input label="Group" placeholder="Group" defaultValue={exercise.group} onChange={bind('group')} />
-          <TextArea defaultValue={exercise.instructions} label="Instructions" previewMarkdown={true} onChange={bind('instructions')} />
-
-          <For each="question" of={exercise.questions} index="index">
-            <Header2 text={"Question: " + (index + 1)} attached="top" />
-            <Segment attached="bottom">
-              <QuestionEditView key={question._id} question={question} bind={bind} index={index}  />
-            </Segment>
-          </For>
-        </Segment>
-
-        <Button color="primary" text="Submit" floated="right" onClick={() => {
-            save(exercise._id).then((result: any) => {
-              if (result.errors) {
-                alert(JSON.stringify(result.errors));
-              }
-              // if we have the data we want
-              if (result.data) {
-                context.Utils.Ui.alert('Life is good!');
-              };
-            });
-          }
-        } />
-
-        <Button color="default" text="Insert Question" icon="plus" floated="right" onClick={insertQuestion} />
-      </Otherwise>
-    </Choose>
+const Questions = ({fields, questions}: IQuestionsProps) => (
+  <div>
+    { 
+      fields.map((questionPath, index) => (
+        <div key={index}>
+          <Header2 text={"Question: " + (index + 1)} attached="top">
+            <Button color="red" text="Remove Question" type="button" floated="right" onClick={() => fields.remove(index)} />
+          </Header2>
+          <Segment attached="bottom">
+            <QuestionEditView formPath={questionPath} question={questions[index]} index={index} />
+          </Segment>
+        </div>
+      ))
+    }
+    <Button style={{marginTop: '12px'}} color="default" text="Insert Question" 
+      icon="plus" floated="right" onClick={() => fields.push()} />
+    <div style={{clear: 'both'}}></div>
   </div>
-)};
+);
+
+
+const ExerciseView = ({ handleSubmit, context, params, userId, data, save, initialValues: { exercise }}: IComponent) => {
+
+  return (
+
+    <form className="ui form" onSubmit={handleSubmit(save)}>
+      <Choose>
+        <When condition={!exercise}>
+          <Loading />
+        </When>
+        <Otherwise>
+          <Segment>
+            <Input label="Name" placeholder="Name" name="exercise.name" />
+            <Input label="Group" placeholder="Group" name="exercise.group" />
+
+            <Markdown name="exercise.instructions" label="Instructions" defaultValue={exercise.instructions} />
+
+            <FieldArray name="exercise.questions" component={Questions} questions={exercise.questions} />
+          </Segment>
+
+          <Button color="primary" text="Submit" floated="right" type="submit" onClick={() => {
+            
+          }
+          } />
+        </Otherwise>
+      </Choose>
+    </form>
+  )
+};
 
 
 export default ExerciseView;

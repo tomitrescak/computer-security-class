@@ -139,6 +139,7 @@ declare module "semanticui-react" {
     url?: string;
     target?: string;
     style?: any;
+    type?: "button" | "submit";
   }
 
   export class Button extends React.Component<IButton, {}> { }

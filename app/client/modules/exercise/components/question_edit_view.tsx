@@ -1,12 +1,13 @@
 import * as React from 'react';
-import { Grid, Column, Segment, Input, Divider, Form, Accordion, AccordionItem, TextArea } from 'semanticui-react';
-// import { TextArea } from 'redux-form-semantic-ui';
+import { Grid, Column, Segment, Divider, Form, Accordion, AccordionItem } from 'semanticui-react';
+
+import { TextArea, Input, Markdown } from 'redux-form-semantic-ui';
 import jss from 'jss';
 
 interface IContainerProps { }
 interface IComponentProps {
   question: Cs.Entities.IQuestion;
-  bind: Function;
+  formPath: string;
   index: number;
 }
 
@@ -27,21 +28,21 @@ const { classes } = jss.createStyleSheet({
   }
 }).attach();
 
-const QuestionEditView = ({question, bind, index}: IComponent) => {
+const QuestionEditView = ({formPath, question, index}: IComponent) => {
   return (
-    <Form>
-      <TextArea defaultValue={question.description} previewMarkdown={true} label="Description" onChange={bind(`questions.${index}.description`)} />
-      <Input defaultValue={question.question} label="Question" onChange={bind(`questions.${index}.question`)} />
-      <Input defaultValue={question.expectedAnswer} label="Expected Answer" onChange={bind(`questions.${index}.expectedAnswer`)} />
+    <div>
+      <Markdown name={`${formPath}.description`} label="Description" defaultValue={question ? question.description : ''} />
+      <Input name={`${formPath}.question`} label="Question" />
+      <Input name={`${formPath}.expectedAnswer`} label="Expected Answer" />
       {/*<TextArea defaultValue={question.validation} label="Validation" rows={2} onChange={bind(`questions.${index}.validation`)} />*/}
       {/*<Dropdown id={question._id + '_control'} activation="click" value={question.control} defaultText={question.control} onChange={bind(`questions.${index}.control`)}>
         <DropdownItem text="Input" value="input" />
         <DropdownItem text="Textarea" value="textbox" />
       </Dropdown>*/}
-      <Input defaultValue={question.control} label="Control" onChange={bind(`questions.${index}.control`)} />
+      <Input name={`${formPath}.control`} label="Control" />
       {/*<Input defaultValue={question.points} label="Points" onChange={bind(`questions.${index}.points`)} />*/}
 
-      <If condition={question.possibilities}>
+      <If condition={question && question.possibilities}>
         <Divider />
         <Segment inverted>
           <Accordion id={'Possibilities_' + question._id} classes={`inverted ${classes.accordion}`}>
@@ -58,7 +59,7 @@ const QuestionEditView = ({question, bind, index}: IComponent) => {
           </Accordion>
         </Segment>
       </If>
-    </Form>
+    </div>
   );
 };
 

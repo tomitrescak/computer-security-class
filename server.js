@@ -1,5 +1,5 @@
 // remove before dpoloy
-process.env.MAIL_URL = "smtps://godspaw%40gmail.com:Bailen50a4@smtp.gmail.com"
+// process.env.MAIL_URL = "smtps://********%40gmail.com:**********@smtp.gmail.com"
 
 require('./src/server/app');
 

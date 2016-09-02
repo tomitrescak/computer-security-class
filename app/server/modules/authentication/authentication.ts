@@ -2,7 +2,7 @@ import MongoEntity from '../../connectors/mongo_entity';
 import DataLoader = require('dataloader');
 import * as Random from 'meteor-random';
 // import * as crypto from 'crypto';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcrypt-nodejs';
 import * as jwt from 'jsonwebtoken';
 import config from './config';
 

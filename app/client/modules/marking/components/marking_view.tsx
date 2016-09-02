@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { Header2, Header5, TextArea, Input, Button, Segment, Grid, Column, Items, Item, List, ListItem, Divider, Label, Link, Message } from 'semanticui-react';
+import { Button, Grid, Column, Items, Item, List, ListItem, Divider, Label, Link, Message } from 'semanticui-react';
 
-import * as actions from '../actions/marking_actions';
-import MarkingQuestionView from '../containers/marking_question_container';
+import MarkingExerciseView from '../containers/marking_exercise_container';
 import Loading from '../../core/components/loading_view';
 import jss from 'jss';
 import { markCalculator } from '../../../helpers/app_helpers';
+import DateInput from './date_input';
 
 const { classes } = jss.createStyleSheet({
   dateInput: {
@@ -29,29 +29,25 @@ export interface IComponentProps {
   userId: string;
   showMarked: boolean;
   showPending: boolean;
-  solutions: Cs.Entities.ISolution[];
-  practical: Cs.Entities.IPractical;
-  selectedDate: string;
-  mutations?: {
-    markMutation(solutionIds: string[], comments: string[], marks: number[]): void;
-  };
+  selectedDate: Date;
 }
 export interface IComponentActions {
   toggleMarked: Function;
   togglePending: Function;
-  changeDate: (date: string) => void;
+  changeDate: (date: number) => void;
 }
-export interface IComponent extends IContainerProps, IComponentProps, IComponentActions { }
+export interface IComponent extends IContainerProps, IComponentProps, IComponentActions {
+  solutions: Cs.Entities.ISolution[];
+  practical: Cs.Entities.IPractical;
+  mark(solutionIds: string[], comments: string[], marks: number[]): void;
+}
 
 let user: Cs.Entities.Group<Cs.Entities.ISolution>;
 let index: number;
 
-const MarkingView = ({ context, params, showMarked, showPending, toggleMarked,
-  togglePending, mutations, practical, solutions, selectedDate, changeDate,
-  mutations: { markMutation } }: IComponent) => {
+const MarkingView = ({ context, params, showMarked, showPending, toggleMarked, togglePending, practical, solutions, selectedDate, changeDate, mark  }: IComponent) => {
 
-  // in case there are no solutions we are done
-  if (!practical || !practical.exercises || !practical.exercises[0].questions) {
+  if (!practical || !solutions) {
     return <Loading what="Loading practical ..."/>;
   }
 
@@ -67,11 +63,12 @@ const MarkingView = ({ context, params, showMarked, showPending, toggleMarked,
       <Column width={10}>
         <Choose>
           <When condition={usol.length}>
-            <MarkingExerciseView context={context}
-              markMutation={markMutation}
+            <MarkingExerciseView
+              context={context}
+              markMutation={mark}
               practical={practical}
               exerciseId={params.exerciseId}
-              userSolutions={usol} />
+              initialValues={{ userSolutions: usol }} />
           </When>
           <Otherwise>
             <Message>Please select a user exercise</Message>
@@ -83,7 +80,7 @@ const MarkingView = ({ context, params, showMarked, showPending, toggleMarked,
         <div style={{ height: '30px' }}>
           <Button toggle={showMarked ? 'active' : 'inactive'} text="Marked" floated="right" onClick={toggleMarked} />
           <Button toggle={showPending ? 'active' : 'inactive'} text="Pending" floated="right" onClick={togglePending} />
-          <Input defaultValue={selectedDate} classes={classes.dateInput} placeholder="dd/mm/yyyy" onChange={(e: React.SyntheticEvent) => changeDate(e.currentTarget['value'])} />
+          <DateInput defaultValue={selectedDate['format']('DD/MM/YYYY')} classes={classes.dateInput} placeholder="dd/mm/yyyy" changeDate={changeDate} />
         </div>
         <div style={{ position: 'fixed', top: '135px', bottom: '5px', overflow: 'auto' }}>
           <UsersView context={context}
@@ -100,6 +97,7 @@ const MarkingView = ({ context, params, showMarked, showPending, toggleMarked,
     </Grid>
   );
 };
+
 
 interface IUsersView {
   context: Cs.IContext;
@@ -136,7 +134,7 @@ class UsersView extends React.Component<IUsersView, {}> {
       return aDate < bDate ? -1 : 1;
     });
 
-    let markCalc = markCalculator(practical); 
+    let markCalc = markCalculator(practical);
 
     return (
       <Items>
@@ -166,64 +164,7 @@ class UsersView extends React.Component<IUsersView, {}> {
   }
 }
 
-interface IMarkingExerciseView {
-  context: Cs.IContext;
-  userSolutions: Cs.Entities.ISolution[];
-  practical: Cs.Entities.IPractical;
-  exerciseId: string;
-  markMutation: Function;
-}
 
-let solution: Cs.Entities.ISolution;
-
-const MarkingExerciseView = ({ userSolutions, context, practical, exerciseId, markMutation }: IMarkingExerciseView) => {
-  const exercise = practical.exercises.find((e) => e._id === exerciseId);
-  const user = userSolutions[0].user;
-  return (
-    <div className="ui form">
-      <Header2 text={`${user}: ${exercise.name}`} />
-      <Label color="grey">{context.Utils.Ui.relativeDate(new Date(userSolutions[0].modified))}</Label>
-      <List>
-        <For each="solution" of={userSolutions} index="index">
-          <ListItem key={index}>
-            <MarkingQuestionView context={context} solution={solution} question={exercise.questions.find((q) => q._id === solution.questionId)} />
-          </ListItem>
-        </For>
-      </List>
-      <Button text="Save Marks" icon="save" labeled="left"
-        floated="right" color="primary"
-        onClick={() => {
-          let solutions = context.Store.getState().marking.current;
-
-          const ids: string[] = [];
-          const comments: string[] = [];
-          const marks: number[] = [];
-
-          userSolutions.forEach((s) => {
-            const sol = solutions[s._id]; //.find((t) => t._id === s._id);
-            ids.push(s._id);
-            comments.push(sol.tutorComment);
-            marks.push(sol.mark ? parseInt(sol.mark.toString(), 10) : 0);
-          });
-
-          markMutation(ids, comments, marks).then((result: any) => {
-            if (result.errors) {
-              alert(JSON.stringify(result.errors));
-              console.error(result.errors);
-              console.error(result.errors.stack);
-            }
-            if (result.data) {
-              context.Utils.Ui.alert('Life is good!');
-              // solutionData.refetch();
-            };
-          });
-
-          context.Store.dispatch(actions.updateMarks());
-        } }
-        />
-    </div>
-  );
-};
 
 interface IExercisesView {
   context: Cs.IContext;

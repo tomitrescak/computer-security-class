@@ -39,8 +39,8 @@ declare global {
   }
 }
 
-const networkInterface = createNetworkInterface('http://localhost:3002/graphql'); // /graphql
-// const networkInterface = createNetworkInterface('/graphql');
+// const networkInterface = createNetworkInterface('http://localhost:3002/graphql'); // /graphql
+const networkInterface = createNetworkInterface('/graphql');
 
 // middlewares 123
 

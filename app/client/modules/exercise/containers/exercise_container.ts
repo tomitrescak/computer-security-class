@@ -96,20 +96,6 @@ const withMutation = graphql(gql`
             userAnswers,
             finished
           },
-          // updateQueries: {
-          //   solutions: (previousQueryResult, { mutationResult, queryVariables }) => {
-          //     console.log('updating');
-          //     return {
-          //       solutions: mutationResult.data.answers
-          //     };
-          //   }
-          // }
-          // optimisticResponse: {
-          //   id: '123',
-          //   text,
-          //   completed: true,
-          //   createdAt: new Date(),
-          // }
         }).then((result: any) => {
           // if we have the data we want
           if (result.data) {

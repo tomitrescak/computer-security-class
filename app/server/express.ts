@@ -38,7 +38,7 @@ export function startExpress(conn: MongoConnector) {
     console.log('Serving development build with nwb middleware');
     console.log('Run `npm run build` to create a production build');
     app.use(historyAPIFallback());
-    // app.use(require('nwb/express')(express, { reload: true }));
+    app.use(require('nwb/express')(express, { reload: true }));
   }
 
   // setup logging

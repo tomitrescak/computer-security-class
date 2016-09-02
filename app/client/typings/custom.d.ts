@@ -142,6 +142,7 @@ declare module 'apollo-client' {
   export var GraphQLError: any;
   export var ApolloClient: any;
   export var createNetworkInterface: any;
+  export var createFragment: any;
   export default ApolloClient;
 }
 

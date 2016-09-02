@@ -6,13 +6,17 @@ import { bindingReducer } from '../../../helpers/redux_binding';
 export interface IMarkingState {
   showMarked: boolean;
   showPending: boolean;
+  date: Date;
   solutions: Cs.Entities.ISolution[];
   current: { [index: string]: Cs.Entities.ISolution };
 }
 
 const binder = bindingReducer(actions.UPDATE);
 
-export default function reducer(state: IMarkingState = { showMarked: false, showPending: false, solutions: [], current: null }, action: any) {
+let currentDate = new Date();
+currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
+
+export default function reducer(state: IMarkingState = { showMarked: false, showPending: false, solutions: [], current: null, date: currentDate }, action: any) {
   // take care of binding calls
   const bindingResult = binder(state, action);
   if (bindingResult) {
@@ -37,6 +41,8 @@ export default function reducer(state: IMarkingState = { showMarked: false, show
       const act = {};
       action.solutions.forEach((s: Cs.Entities.ISolution) => act[s._id] = s);
       return update(state, { current: { $set: act } });
+    case actions.SET_DATE:
+      return update(state, { date: { $set: action.date } });
     case actions.TOGGLE_MARKED:
       return update(state, { showMarked: { $set: !state.showMarked } });
     case actions.TOGGLE_PENDING:

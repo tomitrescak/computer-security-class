@@ -1,33 +1,38 @@
 import * as React from 'react';
-import { Header5, TextArea, Button, Segment, Message } from 'semanticui-react';
+import { Header5, Button, Segment, Message } from 'semanticui-react';
 import * as actions from '../actions/marking_actions';
 import Loading from '../../core/components/loading_view';
 
-export interface IContainerProps {
+import { TextArea, Input } from 'redux-form-semantic-ui';
+import { Field } from 'redux-form';
+
+
+export interface IComponentProps {
   context: Cs.IContext;
   solution: Cs.Entities.ISolution;
   question: Cs.Entities.IQuestion;
+  name: string;
 }
 
-export interface IComponentProps {
-  stored: Cs.Entities.ISolution;
-}
+interface IComponent extends IComponentProps { }
 
-interface IComponent extends IComponentProps, IContainerProps { }
+const MarkEditor = ({input: { value, onChange }}: any) => (
+  <div className="ui action labeled input">
+    <div className="ui label">%</div>
+    <input style={{ width: '80px' }} type="number" placeholder={`Mark`} value={value} readOnly  />
+    <Button color="green" text="Good" onClick={() => { onChange('100'); }} />
+    <Button color="orange" text="Kinda" onClick={() => { onChange('50'); } } />
+    <Button color="red" text="Bad" onClick={() => { onChange('0'); } } />
+  </div>
+)
 
-const MarkingQuestionView = ({ context, solution, question, stored }: IComponent) => {
-  const bind = context.Utils.Binding(actions.UPDATE, 'current.' + solution._id);
+const MarkingQuestionView = ({ context, solution, question, name }: IComponent) => {
 
   const expectedAnswer = solution.expectedAnswer ? solution.expectedAnswer : question.expectedAnswer;
   let mark: HTMLInputElement;
-  const markBind = bind('mark');
   const eventSource: any = {
     currentTarget: mark
   };
-
-  if (!stored) {
-    return <Loading what="Loading solution ..." />;
-  }
 
   let color: any = 'blue';
   if (expectedAnswer && new RegExp(expectedAnswer).exec(solution.userAnswer)) {
@@ -57,16 +62,8 @@ const MarkingQuestionView = ({ context, solution, question, stored }: IComponent
         Expected Answer:
         <Message color="grey">{expectedAnswer}</Message>
       </If>
-      <TextArea rows={2} label="Comment" onChange={bind('tutorComment')} value={stored.tutorComment ? stored.tutorComment : ''} />
-      <div className="ui action labeled input">
-        <div className="ui label">%</div>
-        <input style={{ width: '80px' }} ref={(node) => { mark = node; eventSource.currentTarget = node; } } type="number" placeholder={`Mark`} value={stored.mark || stored.mark === 0 ? stored.mark : ''} onChange={markBind} />
-        <Button color="green" text="Good" onClick={() => { mark.value = '100'; markBind(eventSource); } } />
-        <Button color="orange" text="Kinda" onClick={() => { mark.value = '50'; markBind(eventSource); } } />
-        <Button color="red" text="Bad" onClick={() => { mark.value = '0'; markBind(eventSource); } } />
-      </div>
-
-
+      <TextArea rows={2} label="Comment" name={`${name}.tutorComment`}  />
+      <Field component={MarkEditor} name={`${name}.mark`} />
     </Segment>
   );
 };

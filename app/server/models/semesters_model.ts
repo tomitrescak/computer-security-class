@@ -12,7 +12,7 @@ export default class Semesters extends MongoEntity<Cs.Collections.ISemesterDAO> 
   practicalExercises(semesterId: string, practicals: MongoEntity<Cs.Collections.IPracticalDAO>) {
     if (!this._practicalLoader) {
       this._practicalLoader = new DataLoader<string, Cs.Collections.IPracticalDAO[]>((keys: string[]) => {
-        console.log('Finding practicals ...');
+        // console.log('Finding practicals ...');
 
         return Promise.all(keys.map(async (id) => {
           const semester = await this.findOneCachedById(id);

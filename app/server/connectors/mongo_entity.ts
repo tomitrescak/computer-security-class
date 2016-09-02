@@ -66,7 +66,7 @@ export default class MongoEntity<T> {
 
     if (!this._multiLoader) {
       this._multiLoader = new DataLoader((param) => {
-        console.log('Finding many ...123');
+        // console.log('Finding many ...123');
         return Promise.all([this.collection.find().toArray()]);
       });
     }

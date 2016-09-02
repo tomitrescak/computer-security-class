@@ -20,8 +20,7 @@ const consoleErrorReporter = ({ error }: any) => {
 };
 
 // Hot reload
-
-import { AppContainer as HotLoaderAppContainer } from 'react-hot-loader';
+// import { AppContainer as HotLoaderAppContainer } from 'react-hot-loader';
 import AppRoutes from '../modules/routes';
 
 export default function (inject: Function, {Store}: Cs.IContext) {

@@ -1,8 +1,9 @@
-import Component, { IComponentProps, IContainerProps } from '../components/marking_question_view';
-import { connect, loadingContainer } from 'apollo-mantra';
+// import { reduxForm } from 'redux-form';
+// import MarkingQuestionView from '../components/marking_question_view';
 
-const mapStateToProps = (context: Cs.IContext, state: Cs.IState, ownProps: IContainerProps): IComponentProps => ({
-  stored: state.marking.current[ownProps.solution._id]
-});
+// const QuestionMarkingForm = reduxForm({
+//   form: 'questionMarkingForm',
+//   enableReinitialize: true
+// })(MarkingQuestionView);
 
-export default connect<IContainerProps>({mapStateToProps})(Component);
+// export default QuestionMarkingForm;

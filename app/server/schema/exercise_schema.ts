@@ -140,7 +140,7 @@ const queries = {
     if (!userId || userRoles.indexOf('tutor') === -1) {
       return [];
     }
-    console.log(lastModification);
+    // console.log(lastModification);
     return await solutions.find({ semesterId, practicalId, modified: { $gt: lastModification } }).toArray();
   },
   async practicalSolutions(root: any, { semesterId, practicalId }: any, { userId, solutions }: App.Context): Promise<Cs.Collections.ISolutionDAO[]> {
@@ -201,7 +201,7 @@ const queries = {
 
 const mutationText = `
   answers(solutionIds: [String]!, userAnswers: [String]!, finished: Boolean): [Solution]
-  mark(solutionIds: [String]!, comments: [String]!, marks: [Float]!): Boolean
+  mark(solutionIds: [String]!, comments: [String]!, marks: [Float]!): [Solution]
   save(exercise: ExerciseInput): Exercise
 `;
 
@@ -222,22 +222,28 @@ interface IActionSave {
 }
 
 const mutations = {
-  mark(root: any, { solutionIds, comments, marks }: IActionMark, { userRoles, solutions }: App.Context) {
+  async mark(root: any, { solutionIds, comments, marks }: IActionMark, { userRoles, solutions }: App.Context) {
     // check for tutor
     if (!userRoles || userRoles.indexOf('tutor') === -1) {
       throw new Error('Not authorised!');
     }
 
+    const updated: Cs.Entities.ISolution[] = [];
+
     // let total = 0;
     for (let i = 0; i < solutionIds.length; i++) {
       let cm = marks[i] ? marks[i] : 0;
-      solutions.update({ _id: solutionIds[i] }, {
+      await solutions.update({ _id: solutionIds[i] }, {
         $set: {
           mark: cm,
           tutorComment: comments[i]
         }
       });
+      const updatedSolution = await solutions.findOne({_id: solutionIds[i] });
+      updated.push(updatedSolution);
     }
+
+    return updated;
   },
   async save(root: any, { exercise }: IActionSave, { userRoles, exercises, questions }: App.Context) {
     if (!userRoles || userRoles.indexOf('tutor') === -1) {
@@ -278,7 +284,7 @@ const mutations = {
       const solutionId = solutionIds[i];
       const userAnswer = userAnswers[i]; // .replace(/ /g, '').toLowerCase();
 
-      console.log(solutionId, userId);
+      // console.log(solutionId, userId);
 
       const solution = await solutions.findOne({ _id: solutionId, userId });
       if (!solution) {

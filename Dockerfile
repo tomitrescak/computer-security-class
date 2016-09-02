@@ -9,7 +9,7 @@ ENV EXPRESS_PORT=3000
 #ENV MAIL_URL=smtps://godspaw%40gmail.com:Bailen@smtp.gmail.com
 
 RUN npm --unsafe-perm --production install && npm cache clear
-##RUN ./node_modules/.bin/tsc -p app/server
+#RUN ./node_modules/.bin/tsc -p app/server
 
 EXPOSE 3000
 ENTRYPOINT ["/sbin/tini", "--"]

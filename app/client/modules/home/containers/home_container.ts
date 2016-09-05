@@ -31,5 +31,3 @@ const mapStateToProps = (context: Cs.IContext, state: Cs.IState) => ({
 });
 
 export default connect({ mapQueriesToProps, mapStateToProps })(loadingContainer(HomeView));
-
-//export default AuthContainer(HomeView);

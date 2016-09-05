@@ -9,7 +9,7 @@
     "build": "nwb build-react-app",
     "clean": "nwb clean-app",
     "start": "./node_modules/.bin/forever -a -l /app/logs/f.log -f --pidFile /app/logs/pids.log server.js",
-    "dev": "nodemon --watch src/server server.js",
+    "dev": "EXPRESS_PORT=3000 nodemon --watch src/server server.js",
     "startClient": "nwb serve-react-app --reload",
     "test": "nwb test",
     "test:coverage": "nwb test --coverage",

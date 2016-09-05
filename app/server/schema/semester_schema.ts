@@ -1,6 +1,32 @@
 import { ApolloModule } from 'apollo-modules';
 
 declare global {
+  namespace Cs.Entities {
+    interface Group<T> {
+      key: string;
+      values: T[];
+    }
+  }
+}
+
+function groupByArray<T>(xs: Array<T>, key: string | Function): Cs.Entities.Group<T>[] {
+  return xs.reduce(function (rv, x) {
+    let v = key instanceof Function ? key(x) : x[key];
+    let el = rv.find((r: any) => r && r.key === v);
+    if (el) {
+      el.values.push(x);
+    } else {
+      rv.push({
+        key: v,
+        values: [x]
+      });
+    }
+    return rv;
+  }, []
+  );
+}
+
+declare global {
   namespace Cs.Collections {
     interface ISemesterDAO {
       _id?: string;
@@ -27,6 +53,7 @@ const schema = `
 const queryText = `
   semesters(userId: String): [Semester]
   semester(id: String): Semester
+  marks(semesterId: String): [String]
 `;
 
 const queries = {
@@ -41,6 +68,62 @@ const queries = {
     //   return null;
     // }
     return await semesters.findManyCached();
+  },
+  async marks(root: any, { semesterId }: any, { solutions, semesters, practicals, exercises, userRoles }: App.Context): Promise<string[][]> {
+    const allSolutions = await solutions.find({ semesterId }).toArray();
+    const semester = await semesters.findOneCachedById(semesterId);
+    const pracs = await practicals.find({ _id: { $in: semester.practicals } }).toArray();
+    let excs: Cs.Collections.IExerciseDAO[] = [];
+    for (let p of pracs) {
+      const es = await exercises.find({ _id: { $in: p.exercises } }).toArray();
+      es.forEach((e) => excs.push(e));
+    };
+
+    // if (userRoles.indexOf('tutor') === -1) {
+    //   throw new Error('Not authorised!');
+    // }
+
+    // the output will be table
+    //                   | practicalId  | practicalId |
+    // userId | userName | points       | points .... | total  
+
+    // first group by userId
+    const rows: string[][] = [];
+    const headerRow: string[] = [''];
+    rows.push(headerRow);
+
+    const userGroups = groupByArray(allSolutions, 'userId');
+    for (let group of userGroups) {
+      const userId = group.key;
+      const userName = group.values[0].user;
+
+      const row = [userName];
+      rows.push(row);
+
+      const practicalGroups = groupByArray(group.values, 'practicalId');
+      let total = 0;
+      for (let practicalGroup of practicalGroups) {
+        // total exercises
+        const prac = pracs.find((p) => p._id === practicalGroup.key);
+        const totalExercises = prac.exercises.reduce((prev, next) => prev + excs.find((e) => e._id === next).questions.length, 0) - 1;
+
+        // presence 
+        const presence = practicalGroup.values.filter((p) => p.exerciseId === 'XQi3mLyxpDiWnZsS0').reduce((prev, current) => prev + (current.mark ? current.mark : 0), 0);
+
+        // calculate summary
+        const others = practicalGroup.values.filter((p) => p.exerciseId !== 'XQi3mLyxpDiWnZsS0').reduce((prev, current) => prev + (current.mark ? current.mark : 0), 0);
+
+        const sum = Math.round(5 * (presence / 100) + 5 * (others / (totalExercises * 100)));
+        total += sum;
+        if (headerRow.length < practicalGroups.length) {
+          headerRow.push(practicalGroup.key);
+        }
+        row.push(sum.toString());
+      }
+      row.push(total.toString());
+    }
+    headerRow.push('TOTAL');
+    return rows.sort((a, b) => a[0] < b[0] ? -1 : 1);
   }
 };
 

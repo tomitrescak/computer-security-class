@@ -28,6 +28,9 @@ const { classes } = jss.createStyleSheet({
 }).attach();
 
 const SolutionView = ({ context, question, solution, formName }: IComponent) => {
+  if (!question) {
+    return <span></span>;
+  }
   const questionText = solution.userQuestion ? solution.userQuestion : question.question;
   return (
     <div className="ui form">

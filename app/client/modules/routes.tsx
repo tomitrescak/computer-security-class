@@ -11,6 +11,7 @@ import Practical from './practicals/practical_container';
 import Exercise from './exercise/containers/exercise_container';
 import ExerciseAdmin from './exercise/containers/exercise_edit_container';
 import Marking from './marking/containers/marking_container';
+import Marks from './marking/containers/marks_container';
 
 const AppRoutes = ({ history }: any) => {
   // const MainLayoutCtx = injectDeps(MainLayout);
@@ -24,6 +25,7 @@ const AppRoutes = ({ history }: any) => {
         <Route path="admin/exercise/:name/:exerciseId/:semesterId" component={ExerciseAdmin} />
         <Route path="marking/practical/:name/:practicalId/:semesterId" component={Marking} />
         <Route path="marking/:practicalName/:userName/:userId/:exerciseId/:practicalId/:semesterId" component={Marking} />
+        <Route path="marks/:semesterName/:semesterId" component={Marks} />
       </Route>
     </Router>
   );

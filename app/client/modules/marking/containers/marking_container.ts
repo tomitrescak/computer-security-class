@@ -1,7 +1,6 @@
 import MarkingView, { IContainerProps, IComponentActions, IComponentProps, IComponent } from '../components/marking_view';
-import { connect, loaderContainer, query } from 'apollo-mantra';
+import { connect } from 'apollo-mantra';
 import * as actions from '../actions/marking_actions';
-import composer from 'react-functional';
 import { graphql } from 'react-apollo';
 import { createFragment } from 'apollo-client';
 

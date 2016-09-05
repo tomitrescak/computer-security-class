@@ -105,6 +105,9 @@ const queries = {
       for (let practicalGroup of practicalGroups) {
         // total exercises
         const prac = pracs.find((p) => p._id === practicalGroup.key);
+        if (!prac) {
+          continue;
+        }
         const totalExercises = prac.exercises.reduce((prev, next) => prev + excs.find((e) => e._id === next).questions.length, 0) - 1;
 
         // presence 

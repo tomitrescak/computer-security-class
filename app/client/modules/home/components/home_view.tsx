@@ -50,7 +50,11 @@ const Home = ({ user, data, context }: IProps) => (
               Many semesters ...
             </When>
             <Otherwise>
-              <PracticalView context={context} semesterId={data.semesters[0]._id} practicals={data.semesters[0].practicals.sort((a,b) => a.name < b.name ? -1 : 1)} user={user} />
+              <PracticalView context={context} semesterId={data.semesters[0]._id} practicals={
+                data.semesters[0].practicals.sort((a,b) => {
+                  return a.name < b.name ? 1 : -1;
+                })
+              } user={user} />
             </Otherwise>
           </Choose>
         </If>

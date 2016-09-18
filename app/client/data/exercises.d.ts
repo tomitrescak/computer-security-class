@@ -32,7 +32,7 @@ declare namespace Cs.Entities {
       description?: string;
       question?: string;
       expectedAnswer?: string;
-      control?: "input" | "textbox";
+      control?: "input" | "textarea";
       validation?: string;
       points?: number;
     }

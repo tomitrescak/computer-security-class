@@ -63,7 +63,7 @@ networkInterface.useAfter([{
   applyAfterware(response: any, next: any) {
     if (response.status === 401) {
       localStorage.removeItem('jwtToken');
-      RouterUtils.go('/sessionEnded1');
+      RouterUtils.go('/sessionEnded');
     }
     if (response.status === 200) {
       localStorage.removeItem('jwtToken');

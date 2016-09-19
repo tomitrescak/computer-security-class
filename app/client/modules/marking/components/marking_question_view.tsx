@@ -50,7 +50,7 @@ const MarkingQuestionView = ({ context, solution, question, name }: IComponent) 
                 <Message color={color}>{solution.userAnswer}</Message>
               </When>
               <Otherwise>
-                {solution.userAnswer}
+                <pre>{solution.userAnswer}</pre>
               </Otherwise>
             </Choose>
 

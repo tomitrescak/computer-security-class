@@ -5,7 +5,7 @@ import Loading from '../../core/components/loading_view';
 
 import { TextArea, Input } from 'redux-form-semantic-ui';
 import { Field } from 'redux-form';
-
+import MarkdownView from '../../core/containers/markdown_container';
 
 export interface IComponentProps {
   context: Cs.IContext;
@@ -39,6 +39,13 @@ const MarkingQuestionView = ({ context, solution, question, name }: IComponent) 
     color = 'green';
   }
 
+  // prepare text
+  // if it is multiline, separate it in bullet pointsd
+  let answer = solution.userAnswer;
+  if (answer.indexOf('\n') >= 0) {
+    answer = '- ' + answer.trim();
+    answer = answer.replace(/\n(\w)/gm, '\n- $1');
+  }
   return (
     <Segment>
       <Header5>Question: {solution.userQuestion ? solution.userQuestion : question.question}</Header5>
@@ -50,7 +57,7 @@ const MarkingQuestionView = ({ context, solution, question, name }: IComponent) 
                 <Message color={color}>{solution.userAnswer}</Message>
               </When>
               <Otherwise>
-                <pre>{solution.userAnswer}</pre>
+                <MarkdownView text={answer} />
               </Otherwise>
             </Choose>
 

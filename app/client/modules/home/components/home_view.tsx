@@ -52,7 +52,7 @@ const Home = ({ user, data, context }: IProps) => (
             <Otherwise>
               <PracticalView context={context} semesterId={data.semesters[0]._id} practicals={
                 data.semesters[0].practicals.sort((a,b) => {
-                  return a.name < b.name ? 1 : -1;
+                  return a.name < b.name ? -1 : 1;
                 })
               } user={user} />
             </Otherwise>

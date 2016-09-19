@@ -13,5 +13,4 @@ RUN npm --unsafe-perm install && npm cache clear
 
 EXPOSE 3000
 ENTRYPOINT ["/sbin/tini", "--"]
-CMD ["npm", "run", "build"]
-CMD ["npm", "start"]
+CMD npm run clean && npm run build && npm start

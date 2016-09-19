@@ -39,7 +39,7 @@
     "typescript": "rc"
   },
   "devDependencies": {
-    "apollo-authentication-semantic-ui": ">0.0.2",
+    "apollo-authentication-semantic-ui": ">=0.0.2",
     "apollo-client": "^0.4.11",
     "apollo-mantra": "^1.1.0",
     "bcrypt-nodejs": "0.0.3",
@@ -68,7 +68,7 @@
     "react-router-redux": "^4.0.5",
     "react-s-alert": "^1.1.4",
     "redux-form": "^6.0.1",
-    "redux-form-semantic-ui": "../../packages/redux-form-semantic-ui",
+    "redux-form-semantic-ui": ">=1.0.0",
     "redux-thunk": "^2.1.0",
     "semanticui-react": "^0.1.53",
     "sweetalert2": "^4.1.9"

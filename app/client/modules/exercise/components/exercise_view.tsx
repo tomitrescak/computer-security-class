@@ -69,7 +69,18 @@ const QuestionsView = ({fields, questions, context, solutions}: IQuestionsProps)
 const ExerciseView = ({ context, user, params, userId, exerciseData, initialValues,
   initialValues: { solutions },
   exerciseData: { exercise },
-  answer }: IComponent) => (
+  answer }: IComponent) => {
+
+  // sort question
+  if (exercise && initialValues.solutions) {
+    initialValues.solutions = initialValues.solutions.sort((a, b) => {
+      const a1 = exercise.questions.findIndex(q => q._id == a.questionId);
+      const a2 = exercise.questions.findIndex(q => q._id == b.questionId);
+      return a1 - a2;
+    });
+  }
+
+  return (
     <form onSubmit={(e) => { e.preventDefault(); } } name="exerciseForm">
       <Choose>
         <When condition={!user}>
@@ -129,6 +140,7 @@ const ExerciseView = ({ context, user, params, userId, exerciseData, initialValu
         </Otherwise>
       </Choose>
     </form>
-  );
+  )
+};
 
 export default ExerciseView;

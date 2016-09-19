@@ -147,10 +147,14 @@ const queries = {
     const options = { expectedAnswer: 0 };
     return await solutions.find({ userId, semesterId, practicalId }, options).toArray();
   },
-  async solutions(root: any, { semesterId, practicalId, exerciseId }: any, { userId, userName, solutions, exercises, questions, possibilities }: App.Context): Promise<Cs.Collections.ISolutionDAO[]> {
+  async solutions(root: any, { semesterId, practicalId, exerciseId }: any, { userId, user, solutions, exercises, questions, possibilities }: App.Context): Promise<Cs.Collections.ISolutionDAO[]> {
     if (!userId) {
       return [];
     }
+
+    // find user
+    const userRecord = await user.findOneCachedById(userId);
+
     const options = { expectedAnswer: 0 };
     let sols = await solutions.find({ userId, semesterId, practicalId, exerciseId }, options).toArray();
 
@@ -176,7 +180,7 @@ const queries = {
         const solution: Cs.Collections.ISolutionDAO = {
           _id: Random.id(),
           userId: userId,
-          user: userName,
+          user: userRecord.profile.name,
           exerciseId: exerciseId,
           questionId: question._id,
           semesterId,

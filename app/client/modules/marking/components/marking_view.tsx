@@ -51,11 +51,6 @@ const MarkingView = ({ context, params, showMarked, showPending, toggleMarked, t
     return <Loading what="Loading practical ..."/>;
   }
 
-  const groupBy = context.Utils.Class.groupByArray;
-  // console.log('Render marking ...: ');
-  // console.log(solutionData.markingSolutions);
-  // filter solution by practical and semester
-
   const usol = solutions.filter((s) => s.userId === params.userId && s.exerciseId === params.exerciseId);
 
   return (

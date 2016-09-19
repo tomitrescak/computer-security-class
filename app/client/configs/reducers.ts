@@ -18,7 +18,7 @@ import context from './context';
 // import all other reducers
 
 const rootReducer = combineReducers({
-  accounts: accountsReducer(context),
+  accounts: accountsReducer(() => context ? context() : null),
   apollo: apolloClient.reducer(),
   form: formReducer,
   routing: routerReducer,

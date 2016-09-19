@@ -15,8 +15,6 @@ let practical: Cs.Entities.IPractical;
 let index: number;
 
 const PracticalListView = ({ practicals, context, semesterId, user }: IComponent) => {
-
-
   return (
     <Segment>
       <If condition={user && user.isRole('tutor')}>

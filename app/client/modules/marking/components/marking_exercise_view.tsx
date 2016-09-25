@@ -35,7 +35,9 @@ const MarkingExerciseView = ({ initialValues: { userSolutions }, handleSubmit, c
       <List>
         <For each="solution" of={userSolutions} index="index">
           <ListItem key={index}>
-            <MarkingQuestionView name={`userSolutions[${index}]`} context={context} solution={solution} question={exercise.questions.find((q) => q._id === solution.questionId)} />
+            <If condition={exercise.questions.find((q) => q._id === solution.questionId)}>
+              <MarkingQuestionView name={`userSolutions[${index}]`} context={context} solution={solution} question={exercise.questions.find((q) => q._id === solution.questionId)} />
+            </If>
           </ListItem>
         </For>
       </List>

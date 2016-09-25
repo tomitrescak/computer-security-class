@@ -50,11 +50,17 @@ const QuestionsView = ({fields, questions, context, solutions}: IQuestionsProps)
       {
         fields.map((solutionName, index) => {
           const solution = solutions[index];
+          const question = questions.find((q) => q._id === solution.questionId);
+
+          if (!question) {
+            return <div></div>
+          }
+
           return (
             <SolutionView
               key={index}
               formName={solutionName}
-              question={questions.find((q) => q._id === solution.questionId)}
+              question={question}
               solution={solution}
               solutionId={solution._id}
               context={context}

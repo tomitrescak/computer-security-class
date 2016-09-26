@@ -1,5 +1,5 @@
 import ExerciseView, { IComponentProps, IComponent } from '../components/exercise_view';
-import { connect, loadingContainer } from 'apollo-mantra';
+import { connect } from 'apollo-mantra';
 import { graphql } from 'react-apollo';
 import { reduxForm } from 'redux-form';
 
@@ -38,6 +38,14 @@ const withExerciseData = graphql(gql`
     }
   });
 
+function exerciseSort(exercise: Cs.Entities.IExercise) {
+  return (a: Cs.Entities.ISolution, b: Cs.Entities.ISolution) => {
+    const a1 = exercise.questions.findIndex(q => q._id === a.questionId);
+    const a2 = exercise.questions.findIndex(q => q._id === b.questionId);
+    return a1 - a2;
+  };
+}
+
 const withSolutionData = graphql(gql`
   query solutions($exerciseId: String, $practicalId: String, $semesterId: String) {
     solutions(semesterId: $semesterId, practicalId: $practicalId, exerciseId: $exerciseId) {
@@ -63,13 +71,13 @@ const withSolutionData = graphql(gql`
         }
       };
     },
-    props: ({ solutionData }: any): any => {
-      if (solutionData.loading) {
+    props: ({ solutionData, ownProps: { exerciseData } }: any): any => {
+      if (solutionData.loading || !exerciseData || exerciseData.loading) {
         return { initialValues: { } };
       };
       return {
         initialValues: {
-          solutions: solutionData.solutions
+          solutions: solutionData.solutions.sort(exerciseSort(exerciseData.exercise))
         },
       };
     }
@@ -114,8 +122,8 @@ const withForm = reduxForm({
 });
 
 const ExerciseWithForm = withForm(ExerciseView);
-const ExerciseViewWithExerciseData = withExerciseData(ExerciseWithForm);
-const ExerciseViewSolutionData = withSolutionData(ExerciseViewWithExerciseData);
-const ExerciseWithMutation = withMutation(ExerciseViewSolutionData);
+const ExerciseViewSolutionData = withSolutionData(ExerciseWithForm);
+const ExerciseViewWithExerciseData = withExerciseData(ExerciseViewSolutionData);
+const ExerciseWithMutation = withMutation(ExerciseViewWithExerciseData);
 
 export default connect({ mapStateToProps })(ExerciseWithMutation);

@@ -19,6 +19,7 @@ export interface IComponentProps {
   user: Cs.Accounts.SystemUser;
   exerciseData?: {
     exercise: Cs.Entities.IExercise;
+    loading: boolean;
   };
   solutionData?: {
     solutions: Cs.Entities.ISolution[];
@@ -48,6 +49,7 @@ const QuestionsView = ({fields, questions, context, solutions}: IQuestionsProps)
   return (
     <div>
       {
+        
         fields.map((solutionName, index) => {
           const solution = solutions[index];
           const question = questions.find((q) => q._id === solution.questionId);
@@ -78,13 +80,13 @@ const ExerciseView = ({ context, user, params, userId, exerciseData, initialValu
   answer }: IComponent) => {
 
   // sort question
-  if (exercise && initialValues.solutions) {
-    initialValues.solutions = initialValues.solutions.sort((a, b) => {
-      const a1 = exercise.questions.findIndex(q => q._id == a.questionId);
-      const a2 = exercise.questions.findIndex(q => q._id == b.questionId);
-      return a1 - a2;
-    });
-  }
+  // if (exercise && initialValues.solutions) {
+  //   initialValues.solutions = initialValues.solutions.sort((a, b) => {
+  //     const a1 = exercise.questions.findIndex(q => q._id == a.questionId);
+  //     const a2 = exercise.questions.findIndex(q => q._id == b.questionId);
+  //     return a1 - a2;
+  //   });
+  // }
 
   return (
     <form onSubmit={(e) => { e.preventDefault(); } } name="exerciseForm">

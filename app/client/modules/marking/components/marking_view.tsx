@@ -195,8 +195,8 @@ const ExercisesView = ({userSolutions, userName, context, practical, semesterId,
   }
 
   let total = markCalc(userSolutions);
-  //userSolutions.forEach((s) => total += s.mark ? s.mark : 0);
-  //total = Math.round(total / userSolutions.length);
+  // userSolutions.forEach((s) => total += s.mark ? s.mark : 0);
+  // total = Math.round(total / userSolutions.length);
   return (
 
     <Item.Main>

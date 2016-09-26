@@ -8,18 +8,13 @@ module.exports = {
     plugins: ['jsx-control-statements']
   },
   webpack: {
-    hotMiddleware: {
-      reload: true
-    },
     loaders: {
       babel: {
         test: /\.jsx?/
       }
     },
     extra: {
-      // plugins: [
-      //   new webpack.HotModuleReplacementPlugin()
-      // ],
+      devtool: 'eval-source-map',
       resolve: {
         extensions: ['', '.js', '.jsx', '.json']
       },

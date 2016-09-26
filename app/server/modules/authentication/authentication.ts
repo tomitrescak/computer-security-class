@@ -74,7 +74,8 @@ function calculateHash(text: string): string {
 
 function hashPassword(password: string) {
   password = calculateHash(password);
-  return bcrypt.hashSync(password, 10);
+  const salt = bcrypt.genSaltSync(10);
+  return bcrypt.hashSync(password, salt);
 };
 
 function checkPassword(user: UserEntity, password: string) {

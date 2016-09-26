@@ -37,7 +37,7 @@
     "nodemailer": "^2.5.0",
     "nwb": "^0.12.1",
     "remove": "^0.1.5",
-    "typescript": "rc"
+    "typescript": "^2.0.0"
   },
   "devDependencies": {
     "apollo-authentication-semantic-ui": ">=0.0.2",

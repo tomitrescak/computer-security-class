@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { Grid, Column, Segment, Divider, Form, Accordion, AccordionItem } from 'semanticui-react';
+import { Grid, Column, Segment, Divider, Accordion, AccordionItem } from 'semanticui-react';
 
-import { TextArea, Input, Markdown } from 'redux-form-semantic-ui';
+import { Input, Markdown } from 'redux-form-semantic-ui';
 import jss from 'jss';
 
 interface IContainerProps { }

@@ -15,7 +15,7 @@ export interface IComponentProps extends Cs.Accounts.IAuthContainerProps {
 
 export const Header = ({ isAdmin, user }: IComponentProps) => (
   <Menu inverted color="blue" classes={classes.header}>
-    <MenuItem classes="header" link="/" icon="bug" text="Computer Security" />
+    <MenuItem classes="header" link="/" icon="bug" text="WSU Computer Security" />
     <Menu position="right">
       <UserView />
     </Menu>

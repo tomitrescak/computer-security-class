@@ -12,8 +12,7 @@ declare global {
     export interface Context {
       userId: string;
       userRoles: string[];
-      userEmail: string;
-      userName: string;
+      userEmail: string; 
       user: UserModel;
       practicals: PracticalModel;
       exercises: ExerciseModel;

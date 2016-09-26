@@ -20,6 +20,7 @@ export interface IComponentProps {
 }
 
 export interface IComponent extends IContainerProps, IComponentProps {
+  handleSubmit: Function;
   data: {
     exercise: Cs.Entities.IExercise;
     solutions: Cs.Entities.ISolution[];

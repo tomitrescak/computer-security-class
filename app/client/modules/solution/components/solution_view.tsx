@@ -1,12 +1,9 @@
 import * as React from 'react';
 import { Divider, Label, Message } from 'semanticui-react';
 import { TextArea, Input } from 'redux-form-semantic-ui';
-import { Field } from 'redux-form';
 
 import MarkdownView from '../../core/containers/markdown_container';
 import jss from 'jss';
-
-import * as SolutionActions from '../actions/solution_actions';
 
 export interface IContainerProps {
   solutionId: string;
@@ -28,6 +25,9 @@ const { classes } = jss.createStyleSheet({
 }).attach();
 
 const SolutionView = ({ context, question, solution, formName }: IComponent) => {
+  if (!question) {
+    return <span></span>;
+  }
   const questionText = solution.userQuestion ? solution.userQuestion : question.question;
   return (
     <div className="ui form">

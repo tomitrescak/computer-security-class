@@ -1,6 +1,6 @@
 {
-  "name": "nwb-react-tutorial",
-  "version": "1.0.0",
+  "name": "computer-security",
+  "version": "1.0.2",
   "description": "An implementation of the React tutorial using nwb middleware",
   "private": true,
   "scripts": {
@@ -9,7 +9,7 @@
     "build": "nwb build-react-app",
     "clean": "nwb clean-app",
     "start": "./node_modules/.bin/forever -a -l /app/logs/f.log -f --pidFile /app/logs/pids.log server.js",
-    "dev": "nodemon --watch src/server server.js",
+    "dev": "EXPRESS_PORT=3000 nodemon --watch src/server server.js",
     "startClient": "nwb serve-react-app --reload",
     "test": "nwb test",
     "test:coverage": "nwb test --coverage",
@@ -35,11 +35,12 @@
     "mongodb": "^2.2.5",
     "morgan": "^1.7.0",
     "nodemailer": "^2.5.0",
+    "nwb": "^0.12.1",
     "remove": "^0.1.5",
     "typescript": "rc"
   },
   "devDependencies": {
-    "apollo-authentication-semantic-ui": ">0.0.2",
+    "apollo-authentication-semantic-ui": ">=0.0.2",
     "apollo-client": "^0.4.11",
     "apollo-mantra": "^1.1.0",
     "bcrypt-nodejs": "0.0.3",
@@ -68,12 +69,12 @@
     "react-router-redux": "^4.0.5",
     "react-s-alert": "^1.1.4",
     "redux-form": "^6.0.1",
-    "redux-form-semantic-ui": "../../packages/redux-form-semantic-ui",
+    "redux-form-semantic-ui": ">=1.0.0",
     "redux-thunk": "^2.1.0",
     "semanticui-react": "^0.1.53",
     "sweetalert2": "^4.1.9"
   },
-  "author": "Jonny Buchanan <jonathan.buchanan@gmail.com>",
+  "author": "Tomas Trescak <tomi.trescak@gmail.com>",
   "license": "MIT",
   "repository": {
     "type": "git",

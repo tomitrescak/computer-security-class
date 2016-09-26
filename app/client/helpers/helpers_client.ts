@@ -9,6 +9,9 @@ import { push } from 'react-router-redux';
 
 export const RouterUtils = {
   encodeUrlName(name: string): string {
+    if (!name) {
+      return 'EMPTY';
+    }
     let result = name.replace(/\:/g, '');
     result = result.replace(/ - /g, '-');
     result = result.replace(/\W/g, '-');

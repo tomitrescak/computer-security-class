@@ -38,6 +38,13 @@ export default function (inject: Function, {Store}: Cs.IContext) {
   renderApp(AppRoutes);
 
 
+  if (module.hot) {
+    module.hot.accept('../modules/routes.jsx', () => {
+      const NextAppRoutes = require('../modules/routes.jsx');
+      renderApp(NextAppRoutes);
+    });
+  }
+
   // <HotLoaderAppContainer errorReporter={consoleErrorReporter}>
   //   <ApolloProvider store={Store} client={apolloClient}>
   //     <CurrentAppRoutes history={history} injectDeps={inject} />

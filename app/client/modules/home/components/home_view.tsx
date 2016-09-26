@@ -16,6 +16,9 @@ const { classes } = jss.createStyleSheet({
     '& .information': {
       margin: '5em 1em 1em 0em'
     },
+    '& .homeImage': {
+      'overflow': 'hidden'
+    },
     '& h1': {
       'font-size': '3em!important',
       'margin-bottom': '1em!important'
@@ -47,14 +50,18 @@ const Home = ({ user, data, context }: IProps) => (
               Many semesters ...
             </When>
             <Otherwise>
-              <PracticalView context={context} semesterId={data.semesters[0]._id} practicals={data.semesters[0].practicals} />
+              <PracticalView context={context} semesterId={data.semesters[0]._id} practicals={
+                data.semesters[0].practicals.sort((a,b) => {
+                  return a.name < b.name ? -1 : 1;
+                })
+              } user={user} />
             </Otherwise>
           </Choose>
         </If>
       </div>
       <Else />
       <Grid stackable columns={2}>
-        <Column width={6} classes="computer only tablet only">
+        <Column width={6} classes="computer only tablet only homeImage">
           <img src="hacker.png" />
         </Column>
         <Column width={10}>

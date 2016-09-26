@@ -45,13 +45,27 @@ export interface IComponent extends IContainerProps, IComponentProps, IComponent
 let user: Cs.Entities.Group<Cs.Entities.ISolution>;
 let index: number;
 
+function exerciseSort(exercise: Cs.Entities.IExercise) {
+  return (a: Cs.Entities.ISolution, b: Cs.Entities.ISolution) => {
+    if (!exercise) {
+      console.warn('No exercise ...');
+      return 0;
+    }
+    const a1 = exercise.questions.findIndex(q => q._id === a.questionId);
+    const a2 = exercise.questions.findIndex(q => q._id === b.questionId);
+    return a1 - a2;
+  };
+}
+
 const MarkingView = ({ context, params, showMarked, showPending, toggleMarked, togglePending, practical, solutions, selectedDate, changeDate, mark  }: IComponent) => {
 
   if (!practical || !solutions) {
     return <Loading what="Loading practical ..."/>;
   }
 
-  const usol = solutions.filter((s) => s.userId === params.userId && s.exerciseId === params.exerciseId);
+  const usol = solutions
+    .filter((s) => s.userId === params.userId && s.exerciseId === params.exerciseId)
+    .sort(exerciseSort(practical.exercises.find(e => e._id === params.exerciseId)));
 
   return (
     <Grid columns={2}>

@@ -1,5 +1,4 @@
-import MongoEntity from '../connectors/mongo_entity';
-import MongoConnector from '../connectors/mongo_connector';
+import { MongoConnector, MongoEntity } from 'apollo-connector-mongodb';
 
 export default class Questions extends MongoEntity<Cs.Collections.IQuestionDAO> {
   constructor(connector: MongoConnector) {

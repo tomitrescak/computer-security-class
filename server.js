@@ -1,6 +1,7 @@
 // remove before dpoloy
 // process.env.MAIL_URL = "smtps://********%40gmail.com:**********@smtp.gmail.com"
 
+require('import-to-commonjs/dist/register');
 require('./src/server/app');
 
 // var fs = require('fs')

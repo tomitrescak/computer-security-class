@@ -1,11 +1,12 @@
 import { connect } from 'react-redux';
+import User = Cs.User;
 
 function noRole() { return false; }
 
 declare global {
   namespace Cs.Accounts {
     interface IAuthContainerProps {
-      user: SystemUser;
+      user: User;
       isAdmin: boolean;
       isRole: (role: string|string[]) => boolean;
       loggingIn: boolean;

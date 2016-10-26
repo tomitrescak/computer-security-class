@@ -2,10 +2,11 @@
 // this is the root for all reducers so that we can hot reload them
 
 import apolloClient from './apollo';
+import accountsReducer from '../modules/user/configs/user_reducer';
+import User from '../modules/user/configs/user_model';
 import { combineReducers } from 'redux';
 import { routerReducer } from 'react-router-redux';
 import { reducer as formReducer } from 'redux-form';
-import { reducer as accountsReducer } from 'apollo-authentication-semantic-ui';
 import solutionReducer, { ISolutionState } from '../modules/solution/actions/solution_reducer';
 import exerciseReducer, { IExerciseState } from '../modules/exercise/actions/exercise_reducer';
 import markingReducer, { IMarkingState } from '../modules/marking/actions/marking_reducer';
@@ -13,30 +14,31 @@ import practicalReducer, { IPracticalState } from '../modules/practicals/practic
 
 import { IState as IAccountsState } from 'apollo-authentication-semantic-ui';
 import { IStore as ReduxStore } from 'redux';
-import context from './context';
 
 // import all other reducers
+export default function () {
+  const apolloReducer: any = apolloClient.reducer();
+  const rootReducer = combineReducers({
+    accounts: accountsReducer,
+    apollo: apolloReducer,
+    form: formReducer,
+    routing: routerReducer,
+    solution: solutionReducer,
+    exercise: exerciseReducer,
+    marking: markingReducer,
+    practical: practicalReducer
+  });
 
-const rootReducer = combineReducers({
-  accounts: accountsReducer(() => context ? context() : null),
-  apollo: apolloClient.reducer(),
-  form: formReducer,
-  routing: routerReducer,
-  solution: solutionReducer,
-  exercise: exerciseReducer ,
-  marking: markingReducer,
-  practical: practicalReducer
-});
+  return rootReducer;
 
-export default rootReducer;
-
+}
 // typescript types holding all action creators
 
 declare global {
   namespace Cs {
     export interface IState {
       apollo: IApolloState;
-      accounts: IAccountsState<AccountsUI.User>;
+      accounts: IAccountsState<User>;
       solution: ISolutionState;
       exercise: IExerciseState;
       marking: IMarkingState;

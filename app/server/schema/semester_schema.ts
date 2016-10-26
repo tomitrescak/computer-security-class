@@ -67,12 +67,12 @@ const queries = {
     // if (!userId) {
     //   return null;
     // }
-    return await semesters.findManyCached();
+    return await semesters.findAllCached();
   },
-  async marks(root: any, { semesterId }: any, { solutions, semesters, practicals, exercises, userRoles }: App.Context): Promise<string[][]> {
+  async marks(root: any, { semesterId }: any, { solutions, semesters, practicals, users, exercises, userRoles }: App.Context): Promise<string[][]> {
     const allSolutions = await solutions.find({ semesterId }).toArray();
     const semester = await semesters.findOneCachedById(semesterId);
-    const pracs = await practicals.find({ _id: { $in: semester.practicals } }).toArray();
+    const pracs = await practicals.find({ _id: { $in: semester.practicals } }).sort({ name: 1}).toArray();
     let excs: Cs.Collections.IExerciseDAO[] = [];
     for (let p of pracs) {
       const es = await exercises.find({ _id: { $in: p.exercises } }).toArray();
@@ -89,20 +89,29 @@ const queries = {
 
     // first group by userId
     const rows: string[][] = [];
-    const headerRow: string[] = [''];
+    const headerRow: string[] = pracs.map(p => p.name);
+    headerRow.unshift('');
+    headerRow.unshift('');
     rows.push(headerRow);
 
     const userGroups = groupByArray(allSolutions, 'userId');
     for (let group of userGroups) {
       const userId = group.key;
+      const user = await users.findOneCachedById(userId);
       const userName = group.values[0].user;
 
-      const row = [userName];
+      const row = [userName + ',' + user.emails[0].address];
       rows.push(row);
 
       const practicalGroups = groupByArray(group.values, 'practicalId');
       let total = 0;
-      for (let practicalGroup of practicalGroups) {
+      for (let p of pracs) {
+        const practicalGroup = practicalGroups.find(g => g.key === p._id);
+        if (!practicalGroup) {
+          row.push('');
+          continue;
+        }
+
         // total exercises
         const prac = pracs.find((p) => p._id === practicalGroup.key);
         if (!prac) {
@@ -116,11 +125,10 @@ const queries = {
         // calculate summary
         const others = practicalGroup.values.filter((p) => p.exerciseId !== 'XQi3mLyxpDiWnZsS0').reduce((prev, current) => prev + (current.mark ? current.mark : 0), 0);
 
-        const sum = Math.round(5 * (presence / 100) + 5 * (others / (totalExercises * 100)));
+        const sum = Math.round(5 * (presence / 100) + 5 *
+          (others / (totalExercises * 100)));
         total += sum;
-        if (headerRow.length < practicalGroups.length) {
-          headerRow.push(practicalGroup.key);
-        }
+        
         row.push(sum.toString());
       }
       row.push(total.toString());

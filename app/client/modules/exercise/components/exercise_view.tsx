@@ -16,7 +16,7 @@ export interface IContainerProps {
 export interface IComponentProps {
   context: Cs.IContext;
   userId: string;
-  user: Cs.Accounts.SystemUser;
+  user: Cs.User;
   exerciseData?: {
     exercise: Cs.Entities.IExercise;
     loading: boolean;

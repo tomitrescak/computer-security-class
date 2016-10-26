@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Router, Route, IndexRoute } from 'react-router';
+import { Router, Route, IndexRoute } from 'react-router';
 
 // Layouts
 import MainLayout from './layouts/containers/main_layout_container';
@@ -15,7 +15,6 @@ import Marks from './marking/containers/marks_container';
 
 const AppRoutes = ({ history }: any) => {
   // const MainLayoutCtx = injectDeps(MainLayout);
-
   return (
     <Router history={history}>
       <Route path="/" component={MainLayout}>

@@ -1,9 +1,10 @@
-import MongoEntity from '../connectors/mongo_entity';
-import MongoConnector from '../connectors/mongo_connector';
-import DataLoader = require('dataloader');
+import { MongoConnector, MongoEntity } from 'apollo-connector-mongodb';
+import { IDataLoader } from 'dataloader';
+
+const DataLoader = require('dataloader');
 
 export default class Semesters extends MongoEntity<Cs.Collections.ISemesterDAO> {
-  private _practicalLoader: DataLoader<string, Cs.Collections.IPracticalDAO[]>;
+  private _practicalLoader: IDataLoader<string, Cs.Collections.IPracticalDAO[]>;
 
   constructor(connector: MongoConnector) {
     super(connector, 'semesters');
@@ -11,7 +12,7 @@ export default class Semesters extends MongoEntity<Cs.Collections.ISemesterDAO> 
 
   practicalExercises(semesterId: string, practicals: MongoEntity<Cs.Collections.IPracticalDAO>) {
     if (!this._practicalLoader) {
-      this._practicalLoader = new DataLoader<string, Cs.Collections.IPracticalDAO[]>((keys: string[]) => {
+      this._practicalLoader = new DataLoader((keys: string[]) => {
         // console.log('Finding practicals ...');
 
         return Promise.all(keys.map(async (id) => {

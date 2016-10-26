@@ -133,7 +133,7 @@ const withPractical = graphql(gql`
     }
   });
 
-let tid: number = null;
+let tid: any = null;
 
 const withSolutions = graphql(gql`
   query markingSolutions($practicalId: String, $semesterId: String, $lastModification: Date, $userId: String) {
@@ -170,7 +170,7 @@ const withSolutions = graphql(gql`
               lastModification: getLastModification()
             },
             // tell Apollo Client how to merge the new results of the query
-            updateQuery: (previousResult: any, { fetchMoreResult, queryVariables }: any) => {
+            updateQuery: (previousResult: any, { fetchMoreResult }: any) => {
               const prevSolutions = previousResult.markingSolutions;
               const newSolutions = fetchMoreResult.data.markingSolutions;
 
@@ -204,4 +204,4 @@ const MarkingWithMutation = withMutation(MarkingWithSolutions);
 const MarkingWithPractical = withPractical(MarkingWithMutation);
 
 
-export default connect({ mapDispatchToProps, mapStateToProps })(MarkingWithPractical);
+export default connect(mapStateToProps, mapDispatchToProps)(MarkingWithPractical);

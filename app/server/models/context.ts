@@ -1,5 +1,5 @@
 
-import UserModel from '../modules/authentication/authentication';
+import { User, UserEntity } from 'apollo-module-authentication';
 import PracticalModel from './practical_model';
 import ExerciseModel from './exercise_model';
 import SolutionsModel from './solutions_model';
@@ -12,8 +12,8 @@ declare global {
     export interface Context {
       userId: string;
       userRoles: string[];
-      userEmail: string; 
-      user: UserModel;
+      userEmail: string;
+      users: User<UserEntity>;
       practicals: PracticalModel;
       exercises: ExerciseModel;
       solutions: SolutionsModel;
@@ -25,11 +25,10 @@ declare global {
 }
 
 export default function (conn: any) {
-  const user = new UserModel(conn, 'users');
-  user.fixtures();
+  const users = new User(conn);
 
   return {
-    user,
+    users,
     practicals: new PracticalModel(conn),
     exercises: new ExerciseModel(conn),
     solutions: new SolutionsModel(conn),

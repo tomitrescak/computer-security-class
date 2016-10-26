@@ -1,0 +1,11 @@
+{
+  "resolution": "main",
+  "tree": {
+    "src": "https://raw.githubusercontent.com/types/npm-proxyquire/e94c99bbac8d350e28edd70471d9460a5534927b/typings.json",
+    "raw": "registry:npm/proxyquire#1.0.0+20160723033700",
+    "main": "index.d.ts",
+    "global": false,
+    "name": "proxyquire",
+    "type": "typings"
+  }
+}

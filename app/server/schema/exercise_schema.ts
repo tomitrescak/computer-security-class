@@ -36,7 +36,7 @@ declare global {
       description?: string;
       question?: string;
       expectedAnswer?: string;
-      control?: "input" | "textbox";
+      control?: 'input' | 'textarea';
       validation?: string;
       points?: number;
     }
@@ -147,13 +147,13 @@ const queries = {
     const options = { expectedAnswer: 0 };
     return await solutions.find({ userId, semesterId, practicalId }, options).toArray();
   },
-  async solutions(root: any, { semesterId, practicalId, exerciseId }: any, { userId, user, solutions, exercises, questions, possibilities }: App.Context): Promise<Cs.Collections.ISolutionDAO[]> {
+  async solutions(root: any, { semesterId, practicalId, exerciseId }: any, { userId, users, solutions, exercises, questions, possibilities }: App.Context): Promise<Cs.Collections.ISolutionDAO[]> {
     if (!userId) {
       return [];
     }
 
     // find user
-    const userRecord = await user.findOneCachedById(userId);
+    const userRecord = await users.findOneCachedById(userId);
 
     const options = { expectedAnswer: 0 };
     let sols = await solutions.find({ userId, semesterId, practicalId, exerciseId }, options).toArray();
@@ -191,7 +191,7 @@ const queries = {
           created
         };
 
-        solutions.insert(solution);
+        solutions.insertOne(solution);
       }
 
       // refetch data from db
@@ -237,7 +237,7 @@ const mutations = {
     // let total = 0;
     for (let i = 0; i < solutionIds.length; i++) {
       let cm = marks[i] ? marks[i] : 0;
-      await solutions.update({ _id: solutionIds[i] }, {
+      await solutions.updateOne({ _id: solutionIds[i] }, {
         $set: {
           mark: cm,
           tutorComment: comments[i]
@@ -255,7 +255,7 @@ const mutations = {
     }
 
     // first update the exercise
-    await exercises.update({ _id: exercise._id }, {
+    await exercises.updateOne({ _id: exercise._id }, {
       $set: {
         name: exercise.name,
         instructions: exercise.instructions,
@@ -266,7 +266,7 @@ const mutations = {
 
     // then update all questions
     for (let question of exercise.questions) {
-      await questions.update({ _id: question._id }, { $set: question }, { upsert: true });
+      await questions.updateMany({ _id: question._id }, { $set: question }, { upsert: true });
     }
 
     // find the exercise again as it needs to be re-resolved
@@ -325,7 +325,7 @@ const mutations = {
       solution.modified = modified.getTime();
       answers.push(solution);
 
-      await solutions.update({ _id: solution._id }, { $set: { userAnswer, finished, modified } });
+      await solutions.updateOne({ _id: solution._id }, { $set: { userAnswer, finished, modified } });
     }
     return answers;
   }

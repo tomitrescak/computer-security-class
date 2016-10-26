@@ -10,4 +10,4 @@ const mapStateToProps = (context: Cs.IContext, state: Cs.IState, ownProps: IProp
   html: context.Utils.Ui.parseMarkdown(ownProps.text)
 });
 
-export default connect<IProps>({ mapStateToProps })(Component);
+export default connect<IProps>(mapStateToProps)(Component);

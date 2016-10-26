@@ -1,0 +1,31 @@
+{
+  "compileOnSave": true,
+  "compilerOptions": {
+    "target": "es6",
+    "module": "es6",
+    "declaration": false,
+    "noImplicitAny": true,
+    "removeComments": false,
+    "noLib": false,
+    "preserveConstEnums": true,
+    "outDir": "../src",
+    "suppressImplicitAnyIndexErrors": true,
+    "jsx": "preserve",
+    "experimentalDecorators": true,
+    "sourceMap": true,
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "node",
+    "allowJs": false,
+    "strictNullChecks": false,
+    "noImplicitReturns": false,
+    "noImplicitThis": false,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "types": ["node", "chai", "react"]
+  },
+  "exclude": [
+    "node_modules"
+  ]
+}

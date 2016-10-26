@@ -1,11 +1,7 @@
 import * as React from 'react';
-import { Input, IInput } from 'semanticui-react';
+import { Input } from 'semanticui-react';
 
-interface IProps extends IInput {
-  changeDate: (date: number) => void;
-}
-
-export default class DateInput extends React.Component<IProps, {}> {
+export default class DateInput extends React.Component<any, {}> {
 
   render() {
     return (

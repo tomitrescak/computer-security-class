@@ -91,7 +91,7 @@ const withMutation = graphql(gql`
 const ExerciseForm = reduxForm({
   form: 'exerciseEditForm',
   enableReinitialize: true
-})(ExerciseView);
+})(<any> ExerciseView);
 
 // data
 
@@ -109,4 +109,4 @@ const mapStateToProps = (context: Cs.IContext, state: Cs.IState, ownProps: ICont
 });
 
 
-export default connect({ mapStateToProps })(ExerciseWithMutation);
+export default connect(mapStateToProps)(ExerciseWithMutation);

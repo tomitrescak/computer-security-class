@@ -10,10 +10,19 @@
   "tasks": [
     {
       "isWatching": true,
-      "taskName": "Compile Client",
+      "taskName": "Compile Both",
       "problemMatcher": "$tsc-watch",
       "suppressTaskName": true,
       "isBuildCommand": true,
+      "args": [
+        "./app"
+      ]
+    },
+    {
+      "isWatching": true,
+      "taskName": "Compile Client",
+      "problemMatcher": "$tsc-watch",
+      "suppressTaskName": true,
       "args": [
         "./app/client"
       ]

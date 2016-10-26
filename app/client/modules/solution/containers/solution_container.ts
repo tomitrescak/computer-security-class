@@ -10,4 +10,4 @@ const mapStateToProps = (context: Cs.IContext, state: Cs.IState, ownProps: ICont
 //   solution: state.solution.solutions[ownProps.solutionId]
 // });
 
-export default connect<IContainerProps>({mapStateToProps})(Component);
+export default connect<IContainerProps>(mapStateToProps)(Component);

@@ -15,10 +15,23 @@ export interface IComponent {
 
 let markRow: string;
 let mark: string;
+let index: number;
 
 export const MarksView = ({ marks }: IComponent) => {
   if (!marks) {
     return <Loading />;
+  }
+
+  const totalMarks = marks[0].split(',').length;
+
+  function renderRow(row: string) {
+    let cols: any[] = [];
+    let vals = row.split(',');
+    for (let i = 0; i < totalMarks; i++) {
+      let val = vals[i] || '';
+      cols.push(<td key={i}>{val}</td>);
+    }
+    return cols;
   }
 
   return (
@@ -27,10 +40,8 @@ export const MarksView = ({ marks }: IComponent) => {
       <table className="ui selectable celled table">
         <tbody>
           <For each="markRow" of={marks} index="index">
-            <tr>
-              <For each="mark" of={markRow.split(',')} index="index">
-                <td>{mark}</td>
-              </For>
+            <tr key={index}>
+              {renderRow(markRow)}
             </tr>
           </For>
         </tbody>

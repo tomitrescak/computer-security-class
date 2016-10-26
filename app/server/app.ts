@@ -1,6 +1,6 @@
 import { startExpress } from './express';
 
-import MongoConnector from './connectors/mongo_connector';
+import { MongoConnector } from 'apollo-connector-mongodb';
 
 // console.log(schemas.schema);
 // console.log('--------------------------')
@@ -11,7 +11,8 @@ const mongoURL = process.env.MONGODB_PORT_27017_TCP_ADDR ?
    'mongodb://localhost:27017';
 const fullMongoURL = mongoURL + '/CsNew';
 
-const conn = new MongoConnector(fullMongoURL, () => {
+const conn = new MongoConnector(fullMongoURL);
+conn.connect(() => {
   // init express and apollo
   startExpress(conn);
 });

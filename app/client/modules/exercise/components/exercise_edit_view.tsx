@@ -4,7 +4,7 @@ import QuestionEditView from './question_edit_view';
 import Loading from '../../core/components/loading_view';
 import * as actions from '../actions/exercise_actions';
 import { Markdown, Input } from 'redux-form-semantic-ui';
-import { Field, FieldMap, FieldArray } from 'redux-form'
+import { Field, FieldArray } from 'redux-form';
 import Random from 'meteor-random';
 
 export interface IContainerProps {
@@ -35,14 +35,14 @@ export interface IComponent extends IContainerProps, IComponentProps {
 
 
 interface IQuestionsProps {
-  fields: FieldMap;
+  fields: any;
   questions: Cs.Entities.IQuestion;
 }
 
 const Questions = ({fields, questions}: IQuestionsProps) => (
   <div>
     { 
-      fields.map((questionPath, index) => (
+      fields.map((questionPath: any, index: any) => (
         <div key={index}>
           <Header2 text={"Question: " + (index + 1)} attached="top">
             <Button color="red" text="Remove Question" type="button" floated="right" onClick={() => fields.remove(index)} />

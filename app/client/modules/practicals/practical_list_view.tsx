@@ -6,7 +6,7 @@ interface IComponentProps {
   context: Cs.IContext;
   practicals: Cs.Entities.IPractical[];
   semesterId: string;
-  user: Cs.Accounts.SystemUser;
+  user: Cs.User;
 }
 interface IComponentActions { }
 interface IComponent extends IContainerProps, IComponentProps, IComponentActions { }

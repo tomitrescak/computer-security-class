@@ -9,7 +9,7 @@ import * as cors from 'cors';
 import { createServer } from 'apollo-modules';
 import initSchema from './schema/index';
 import initContext from './models/context';
-import MongoConnector from './connectors/mongo_connector';
+import { MongoConnector } from 'apollo-connector-mongodb';
 
 import { makeExecutableSchema } from 'graphql-tools';
 import * as historyAPIFallback from 'connect-history-api-fallback';
@@ -37,7 +37,17 @@ export function startExpress(conn: MongoConnector) {
   // setup apollo
   const modules = initSchema();
   const context = initContext(conn);
-  const schema = makeExecutableSchema({ typeDefs: modules.schema, resolvers: modules.resolvers, allowUndefinedInResolve: true });
+  const moduleSchema: any = {
+    typeDefs: modules.schema,
+    resolvers: modules.resolvers,
+    allowUndefinedInResolve: true,
+    resolverValidationOptions: {
+      requireResolversForNonScalar: false
+    }
+  };
+
+  // console.log(modules.schema)
+  const schema = makeExecutableSchema(moduleSchema);
   const graphqlOptions = {
     context,
     modules,
@@ -55,7 +65,8 @@ export function startExpress(conn: MongoConnector) {
 
   // setup cors
 
-  app.use('/graphql', apollo.apolloExpress(createServer(graphqlOptions)));
+  const server: any = createServer(graphqlOptions);
+  app.use('/graphql', apollo.apolloExpress(server));
   app.use('/graphiql', apollo.graphiqlExpress({ endpointURL: '/graphql' }));
 
   try {
@@ -63,9 +74,7 @@ export function startExpress(conn: MongoConnector) {
     console.log('Serving static build from dist/');
     console.log('Run `npm run clean` to return to development mode');
     app.use('/', express.static(path.join(__dirname, '../../dist')));
-    app.get('*', function (req, res) {
-      res.sendFile(path.join(__dirname, '../../dist/index.html'));
-    });
+    app.use(historyAPIFallback());
   } catch (e) {
     console.log('Serving development build with nwb middleware');
     console.log('Run `npm run build` to create a production build');

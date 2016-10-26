@@ -1,0 +1,3 @@
+// declare module 'apollo-client' {
+  
+// }

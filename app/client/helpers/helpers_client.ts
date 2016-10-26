@@ -4,7 +4,7 @@ import config from '../configs/config';
 import sAlert from 'react-s-alert';
 import swal from 'sweetalert2';
 import mf from '../configs/i18n';
-import store from '../configs/store';
+import initStore from '../configs/store';
 import { push } from 'react-router-redux';
 
 export const RouterUtils = {
@@ -18,7 +18,7 @@ export const RouterUtils = {
     return result.replace(/--/g, '-');
   },
   go(route: string) {
-    store.dispatch(push(route));
+    initStore().dispatch(push(route));
   }
 };
 
@@ -115,7 +115,7 @@ export const UiUtils = {
 
     return html;
   },
-  hResize(lDiv: JQuery, rDiv: JQuery, marker: JQuery, evt: IEventObject) {
+  hResize(lDiv: JQuery, rDiv: JQuery, marker: JQuery, evt: any) {
     return function (e: MouseEvent) {
       let minLeft = lDiv.position().left + 50;
       let maxRight = rDiv.position().left + rDiv.width() - 50;
@@ -129,7 +129,7 @@ export const UiUtils = {
       }
     };
   },
-  relativeResize(lDiv: JQuery, rDiv: JQuery, marker: JQuery, evt: IEventObject) {
+  relativeResize(lDiv: JQuery, rDiv: JQuery, marker: JQuery, evt: any) {
     return function (e: MouseEvent) {
 
       let left = lDiv.offset().left;
@@ -148,7 +148,7 @@ export const UiUtils = {
       }
     };
   },
-  resizer(left: any, right: any, resizer: any, evt: IEventObject) {
+  resizer(left: any, right: any, resizer: any, evt: any) {
     const hresize = UiUtils.relativeResize($(left), $(right), $(resizer), evt);
 
     window.addEventListener('mousemove', hresize, true);

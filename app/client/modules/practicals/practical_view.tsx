@@ -11,9 +11,10 @@ export interface IContainerProps {
 }
 
 export interface IComponentProps {
-  user: Cs.Accounts.SystemUser;
+  user: Cs.User;
+  userId: string;
   context: Cs.IContext,
-  data?: {
+  practicalData?: {
     practical: Cs.Entities.IPractical
   },
   solutionsData?: {
@@ -21,12 +22,12 @@ export interface IComponentProps {
   }
 }
 interface IComponentActions { }
-interface IComponent extends IContainerProps, IComponentProps, IComponentActions { }
+export interface IComponent extends IContainerProps, IComponentProps, IComponentActions { }
 
 let exercise: Cs.Entities.IExercise;
 let index: number;
 
-const Practicals = ({ data: { practical }, solutionsData: { practicalSolutions }, context, params, user}: IComponent) => {
+const Practicals = ({ practicalData: { practical }, solutionsData: { practicalSolutions }, context, params, user}: IComponent) => {
   const calculator = markCalculator(practical);
   let mark: number = null;
   if (practicalSolutions && practicalSolutions.length) {

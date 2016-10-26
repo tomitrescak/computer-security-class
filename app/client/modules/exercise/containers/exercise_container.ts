@@ -116,7 +116,7 @@ const withMutation = graphql(gql`
     })
   });
 
-const withForm = reduxForm({
+const withForm: any = reduxForm({
   form: 'exerciseForm',
   enableReinitialize: true
 });
@@ -126,4 +126,4 @@ const ExerciseViewSolutionData = withSolutionData(ExerciseWithForm);
 const ExerciseViewWithExerciseData = withExerciseData(ExerciseViewSolutionData);
 const ExerciseWithMutation = withMutation(ExerciseViewWithExerciseData);
 
-export default connect({ mapStateToProps })(ExerciseWithMutation);
+export default connect(mapStateToProps)(ExerciseWithMutation);

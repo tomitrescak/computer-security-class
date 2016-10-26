@@ -14,6 +14,12 @@ module.exports = {
       }
     },
     extra: {
+      module: {
+        preLoaders: [
+          { test: /\.js$/, loader: "source-map-loader", exclude: [/node_modules/]  },
+          { test: /\.jsx$/, loader: "source-map-loader", exclude: [/node_modules/]  }
+        ]
+      },
       resolve: {
         extensions: ['', '.js', '.jsx', '.json']
       },

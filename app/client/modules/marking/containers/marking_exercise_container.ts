@@ -4,6 +4,6 @@ import MarkingExerciseView from '../components/marking_exercise_view';
 const ExerciseMarkingForm = reduxForm({
   form: 'exerciseMarkingForm',
   enableReinitialize: true
-})(MarkingExerciseView);
+})(<any> MarkingExerciseView);
 
 export default ExerciseMarkingForm;
